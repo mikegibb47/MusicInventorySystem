@@ -5,12 +5,24 @@
  */
 package musicinventorysystem;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author 067011551
  */
 public class RegisterFrame extends javax.swing.JFrame {
-
+    
+    File file = new File("users.txt");
     /**
      * Creates new form RegisterFrame
      */
@@ -49,6 +61,11 @@ public class RegisterFrame extends javax.swing.JFrame {
         jLabel4.setText("Last Name:");
 
         RegisterButton.setText("Register");
+        RegisterButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RegisterButtonActionPerformed(evt);
+            }
+        });
 
         CancelButton.setText("Cancel");
 
@@ -110,6 +127,48 @@ public class RegisterFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void RegisterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegisterButtonActionPerformed
+        PrintWriter pwUsers;
+        Scanner users;
+        try {
+            users = new Scanner(file);
+            try {
+                try {
+                    MessageDigest mesd = MessageDigest.getInstance("SHA-256");
+                    mesd.update((passwordField.getText()).getBytes());
+                    byte byteData[] = mesd.digest();
+                    String password = "";
+                    for (int i = 0; i < byteData.length; ++i) {
+                        password += (Integer.toHexString((byteData[i] & 0xFF) | 0x100).substring(1, 3));
+                    }
+                    mesd.update((userNameField.getText()).getBytes());
+                    byte byteData2[] = mesd.digest();
+                    String username = "";
+                    for (int i = 0; i < byteData2.length; ++i) {
+                        username += (Integer.toHexString((byteData2[i] & 0xFF) | 0x100).substring(1, 3));
+                    }
+                    
+                    pwUsers = new PrintWriter(new FileWriter(file, true));
+                    pwUsers.println(username + "," + password + "," + firstNameField.getText() + "," + lastNameField.getText());
+                    pwUsers.close();
+                    if ((jTextField1.getText() + "," + password + "," + jTextField3.getText() + "," + jTextField4.getText()).equals(users.nextLine())) {
+                        SuccessPanel.register = false;
+                    } else {
+                        SuccessPanel.register = true;
+                    }
+                    SuccessPanel.regisTry = true;
+                    successPanel3.repaint();
+                } catch (NoSuchAlgorithmException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_RegisterButtonActionPerformed
 
     /**
      * @param args the command line arguments

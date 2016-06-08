@@ -144,9 +144,16 @@ public class Login extends javax.swing.JFrame {
                 for (int i = 0; i < byteData.length; ++i) {
                     password += (Integer.toHexString((byteData[i] & 0xFF) | 0x100).substring(1, 3));
                 }
+                mesd.update((UsernameField.getText()).getBytes());
+                byte byteData2[] = mesd.digest();
+                String username = "";
+                for (int i = 0; i < byteData2.length; ++i) {
+                    username += (Integer.toHexString((byteData2[i] & 0xFF) | 0x100).substring(1, 3));
+                }
+                
                 
                 while (users.hasNextLine() && SuccessPanel.login == false) {
-                    if ((UsernameField.getText() + "," + password).equals(users.next() + "," + users.next())) {
+                    if ((username + "," + password).equals(users.next() + "," + users.next())) {
                         SuccessPanel.login = true;
                     } else {
                         SuccessPanel.login = false;

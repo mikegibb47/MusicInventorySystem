@@ -4,7 +4,10 @@ package musicinventorysystem;
  *
  * @author Matt Gulbronson
  */
-abstract class User {
+class User {
     String uName, pWord, fName, lName;
-    Boolean admin;
+    boolean admin;
+    User(boolean admin){
+        this.admin = admin;
+    }
 }

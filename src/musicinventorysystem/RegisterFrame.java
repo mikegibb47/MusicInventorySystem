@@ -49,6 +49,7 @@ public class RegisterFrame extends javax.swing.JFrame {
         lastNameField = new javax.swing.JTextField();
         RegisterButton = new javax.swing.JButton();
         CancelButton = new javax.swing.JButton();
+        registerPanel1 = new musicinventorysystem.RegisterPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -69,6 +70,17 @@ public class RegisterFrame extends javax.swing.JFrame {
 
         CancelButton.setText("Cancel");
 
+        javax.swing.GroupLayout registerPanel1Layout = new javax.swing.GroupLayout(registerPanel1);
+        registerPanel1.setLayout(registerPanel1Layout);
+        registerPanel1Layout.setHorizontalGroup(
+            registerPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 146, Short.MAX_VALUE)
+        );
+        registerPanel1Layout.setVerticalGroup(
+            registerPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -85,18 +97,20 @@ public class RegisterFrame extends javax.swing.JFrame {
                         .addGap(23, 23, 23)
                         .addComponent(passwordField))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(18, 18, 18)
-                        .addComponent(lastNameField))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(21, 21, 21)
                         .addComponent(userNameField))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 236, Short.MAX_VALUE)
-                        .addComponent(CancelButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(RegisterButton)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(registerPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(CancelButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(RegisterButton))
+                            .addComponent(lastNameField))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -118,11 +132,16 @@ public class RegisterFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(lastNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(RegisterButton)
-                    .addComponent(CancelButton))
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(RegisterButton)
+                            .addComponent(CancelButton))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(registerPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
@@ -152,13 +171,13 @@ public class RegisterFrame extends javax.swing.JFrame {
                     pwUsers = new PrintWriter(new FileWriter(file, true));
                     pwUsers.println(username + "," + password + "," + firstNameField.getText() + "," + lastNameField.getText());
                     pwUsers.close();
-                    if ((jTextField1.getText() + "," + password + "," + jTextField3.getText() + "," + jTextField4.getText()).equals(users.nextLine())) {
-                        SuccessPanel.register = false;
+                    if ((userNameField.getText() + "," + password + "," + firstNameField.getText() + "," + lastNameField.getText()).equals(users.nextLine())) {
+                        RegisterPanel.register = false;
                     } else {
-                        SuccessPanel.register = true;
+                        RegisterPanel.register = true;
                     }
-                    SuccessPanel.regisTry = true;
-                    successPanel3.repaint();
+                    RegisterPanel.regisTry = true;
+                    registerPanel1.repaint();
                 } catch (NoSuchAlgorithmException ex) {
                     Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -215,6 +234,7 @@ public class RegisterFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JTextField lastNameField;
     private javax.swing.JPasswordField passwordField;
+    private musicinventorysystem.RegisterPanel registerPanel1;
     private javax.swing.JTextField userNameField;
     // End of variables declaration//GEN-END:variables
 }

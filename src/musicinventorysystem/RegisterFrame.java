@@ -5,6 +5,7 @@
  */
 package musicinventorysystem;
 
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -22,6 +23,7 @@ import java.util.logging.Logger;
  */
 public class RegisterFrame extends javax.swing.JFrame {
     
+    //declare the file of users
     File file = new File("users.txt");
     /**
      * Creates new form RegisterFrame
@@ -69,6 +71,11 @@ public class RegisterFrame extends javax.swing.JFrame {
         });
 
         CancelButton.setText("Cancel");
+        CancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout registerPanel1Layout = new javax.swing.GroupLayout(registerPanel1);
         registerPanel1.setLayout(registerPanel1Layout);
@@ -148,8 +155,11 @@ public class RegisterFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void RegisterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegisterButtonActionPerformed
+        //declare the writer that will write to the file of users
         PrintWriter pwUsers;
+        //decalre the scanner to read from the file of users
         Scanner users;
+        
         try {
             users = new Scanner(file);
             try {
@@ -189,6 +199,13 @@ public class RegisterFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_RegisterButtonActionPerformed
 
+    private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
+        setVisible(false);
+    }//GEN-LAST:event_CancelButtonActionPerformed
+
+    public void windowClosing (WindowEvent e){
+        setVisible(false);
+    }
     /**
      * @param args the command line arguments
      */

@@ -19,6 +19,7 @@ import java.util.logging.Logger;
  */
 public class Login extends javax.swing.JFrame {
 
+    //declare the scanner and the file of users
     Scanner users;
     File file = new File("users.txt");
     
@@ -137,37 +138,46 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
+        //try to find the file to read users from
         try {
+            //try to find the encrypting method
             try {
+                //declare the scanner to read from the file of users
                 users = new Scanner(file);
+                users.useDelimiter(",");
+                //declare the encrypting method
                 MessageDigest mesd = MessageDigest.getInstance("SHA-256");
+                //encrypt the password
                 mesd.update((PasswordField.getText()).getBytes());
                 byte byteData[] = mesd.digest();
                 String password = "";
                 for (int i = 0; i < byteData.length; ++i) {
                     password += (Integer.toHexString((byteData[i] & 0xFF) | 0x100).substring(1, 3));
                 }
+                //encrypt the username
                 mesd.update((UsernameField.getText()).getBytes());
                 byte byteData2[] = mesd.digest();
                 String username = "";
                 for (int i = 0; i < byteData2.length; ++i) {
                     username += (Integer.toHexString((byteData2[i] & 0xFF) | 0x100).substring(1, 3));
-                }
-                
-                
+                }        
+                //check if the username and passwords match a user's
                 while (users.hasNextLine() && SuccessPanel.login == false) {
                     if ((username + "," + password).equals(users.next() + "," + users.next())) {
                         SuccessPanel.login = true;
                     } else {
                         SuccessPanel.login = false;
+                        users.nextLine();
                     }
                     SuccessPanel.loginTry = true;
                     successPanel1.repaint();
                 }
             } catch (NoSuchAlgorithmException ex) {
+                //if the encrypting method can't be found return an error saying so
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (FileNotFoundException ex) {
+            //if the file isn't found return an error saying the file wasn't found
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -177,6 +187,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_LoginButtonActionPerformed
 
     private void RegisterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegisterButtonActionPerformed
+        //if the register button is pressed open the register window
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new RegisterFrame().setVisible(true);

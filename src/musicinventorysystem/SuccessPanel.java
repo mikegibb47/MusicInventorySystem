@@ -25,13 +25,16 @@ public class SuccessPanel extends javax.swing.JPanel {
     }
 
     public void paintComponent(Graphics g) {
+        //display that the user needs to login or register
         g.drawString("Login or Register", 10, 10);
         if (loginTry == true) {
             super.paintComponent(g);
+            //if the login is successful display that
             if (login == true) {
                 g.setColor(Color.BLUE);
                 g.drawString("Login: Successful", 10, 10);
             } else {
+                //if the login is unsuccessful display that
                 g.setColor(Color.RED);
                 g.drawString("Login: Unsuccessful", 10, 10);
             }

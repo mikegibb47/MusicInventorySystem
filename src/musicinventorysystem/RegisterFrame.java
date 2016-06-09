@@ -5,7 +5,6 @@
  */
 package musicinventorysystem;
 
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -22,9 +21,10 @@ import java.util.logging.Logger;
  * @author 067011551
  */
 public class RegisterFrame extends javax.swing.JFrame {
-    
+
     //declare the file of users
     File file = new File("users.txt");
+
     /**
      * Creates new form RegisterFrame
      */
@@ -157,55 +157,65 @@ public class RegisterFrame extends javax.swing.JFrame {
     private void RegisterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegisterButtonActionPerformed
         //declare the writer that will write to the file of users
         PrintWriter pwUsers;
-        //decalre the scanner to read from the file of users
+        //declare the scanner to read from the file of users
         Scanner users;
-        
+        //try to find the file of users
         try {
             users = new Scanner(file);
+            //try to declare the writer
             try {
+                //try to find the encrypting algorithm
                 try {
+                    //declare the encrypting method
                     MessageDigest mesd = MessageDigest.getInstance("SHA-256");
+                    //encrypt the password
                     mesd.update((passwordField.getText()).getBytes());
                     byte byteData[] = mesd.digest();
                     String password = "";
                     for (int i = 0; i < byteData.length; ++i) {
                         password += (Integer.toHexString((byteData[i] & 0xFF) | 0x100).substring(1, 3));
                     }
+                    //encrypt the usernmae
                     mesd.update((userNameField.getText()).getBytes());
                     byte byteData2[] = mesd.digest();
                     String username = "";
                     for (int i = 0; i < byteData2.length; ++i) {
                         username += (Integer.toHexString((byteData2[i] & 0xFF) | 0x100).substring(1, 3));
                     }
-                    
+                    //write the information to the file
                     pwUsers = new PrintWriter(new FileWriter(file, true));
                     pwUsers.println(username + "," + password + "," + firstNameField.getText() + "," + lastNameField.getText());
                     pwUsers.close();
-                    if ((userNameField.getText() + "," + password + "," + firstNameField.getText() + "," + lastNameField.getText()).equals(users.nextLine())) {
-                        RegisterPanel.register = false;
-                    } else {
-                        RegisterPanel.register = true;
+                    //if the user has been registered already deny their registration
+                    while (users.hasNextLine() && RegisterPanel.register == false) {
+                        if ((username.equals(users.next()))) {
+                            RegisterPanel.register = false;
+                        } else {
+                            RegisterPanel.register = true;
+                        }
                     }
+                    //display the outcome of the registration attempt
                     RegisterPanel.regisTry = true;
                     registerPanel1.repaint();
                 } catch (NoSuchAlgorithmException ex) {
+                    //if the encrypting algorithm can't be found return an error saying so
                     Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } catch (IOException ex) {
+                //if it can't declare the writer return an error saying so
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (FileNotFoundException ex) {
+            //if the file isn't found return an error saying so
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_RegisterButtonActionPerformed
 
     private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
+        //if the cancel button is pushed close the window
         setVisible(false);
     }//GEN-LAST:event_CancelButtonActionPerformed
 
-    public void windowClosing (WindowEvent e){
-        setVisible(false);
-    }
     /**
      * @param args the command line arguments
      */

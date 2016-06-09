@@ -24,13 +24,16 @@ public class RegisterPanel extends javax.swing.JPanel {
 
     @Override
     public void paintComponent(Graphics g){
+        //when the window is opened display register
         g.drawString("Register", 10, 10);
         if (regisTry == true) {
             super.paintComponent(g);
             if (register == true) {
+                //if the registration is successful display that
                 g.setColor(Color.BLUE);
                 g.drawString("Registration: Successful", 10, 10);
             } else {
+                //if the registration is unsuccessful display that
                 g.setColor(Color.RED);
                 g.drawString("Registration: Unsuccessful", 10, 10);
             }

@@ -1,0 +1,179 @@
+
+
+Hello from Erica
+
+
+The way I see it, and mind you this is just me brainstorming on my own, is that this program
+will need these things to work:
+
+-An Instrument Class to hold all the data
+-An Account Class to hold the information of the person currently logged in
+-Some assorted methods to handle reading from and writing to wherever our data is stored
+-A ton of assorted methods that manipulate all the data in the ways we want
+-A GUI to tie it all together
+
+The first two things are pretty self explanatory, but all of these things need some planning before
+we go out and do em..
+
+I've done a bit of spitballing on my own about how to structure parts of the program and how to divide
+up the work, which will follow after this. Feel free to make suggestions; once we agree on something I
+can do all the tedious setting up and then we can all get to coding.
+
+And also be warned that literally none of this is brief, at all. Grab a snack and prepare for a read.
+
+
+
+
+
+
+
+FILE STRUCTURE
+
+This is a huge one, and one we need to figure out ASAP. There are a few things we need to store, in a concise and
+logical way.
+	-Data of users
+	-Data of instruments
+	-Instrument Sign Out History
+	
+The users thing is pretty much covered, if the login system we copypasted works. It's the instruments and their history that
+are the issue, and I've thought up a solution that is pretty simple, and almost exactly what I used for the constellations
+assignment. We need one file for this; the instrument data file. It would be delimited, and structured as follows:
+
+	Name;ID;currentUser;name,name,name,name...
+	Name;ID;currentUser;name,name,name...
+	
+It would be fairly simple to read. Set the scanner to use ";" as a delimiter, read in three the first three pieces of
+information. Then use Scanner.nextLine() to grab the entirety of what is left in the line. The string that results can be
+split into an array using the delimiter "," and stored in the class keeping track of that instrument. Repeat indefinitely.
+
+See my proposed design for the Instrument class for more information on how this structure would work translated to java.
+
+We should also probably encrypt both our data files as much as possible, using irreversible encryption for passwords and
+reversible encryption for everything else. That way, if someone who knows what they're doing manages to find the files,
+they'll find it extremely difficult to pull any shenanigans like changing usernames or editing an instrument's history.
+
+Where we put the files can be considered later. Right now, we can just read in from local text files. If we want to change
+that later to the school's internal server or something, we can, but for the time being text files are easier.
+
+
+
+
+
+
+THE INSTRUMENT CLASS:
+
+Purpose:
+	Pretty much just there to hold information in memory. It's data will be mostly unchangeable once created,
+	except for a few key variables.
+
+Variables:
+	-name - a string which will hold the name of the instrument, like "Clarinet" or "Trumpet" or whatever.
+	-ID - an int or similar variable that will hold some kind of unique identifier, to tell apart instruments
+	with the same name.
+	-isAvailable - a boolean value tracking whether the instrument is in or out. True if it's ready to go,
+	False if it's been signed out or if it's out for service.
+	-curUser - a string. If the instrument is available, this string should be empty. If the instrument has been
+	signed out by someone, this string will contain that student's name. If the instrument is out for service,
+	it will contain "Out For Service" or some similar indicator.
+	-userHist - an arraylist of Strings. This will contain the names of every person who has ever signed out
+	this instrument. The first person who ever signed it out will be the first person in the list. The most
+	recent person who used it will be the last person in the list.
+	
+Method Ideas:
+	-toString() - returns a string containing all relevant information on the instrument, nicely formatted. An
+	example format for this would be something like: "Name  ID  Status", where Name is the name of the instrument,
+	ID is the instrument's unique identifier, and Status is either that it's available, out for service, or the
+	name of whoever has it signed out.
+	-isAvailable() - returns the boolean variable of the same name.
+	-I dunno man, we can make em as we need em
+
+Why I Designed It Like This:
+	The instrument class is just a data holder, so it doesn't need to do anything special. It could just as easily
+	represent laptops or art supplies or anything else that can be signed in, signed out, or serviced. It doesn't
+	need any special methods, nor do we need inheritance or abstract classes for it. All we need is a way to store
+	info, and retrieve info, which this structure achieves with a single compact class.
+	I know using stuff we've been taught this year is imperative to getting a good mark, but the key to good coding
+	is being concise and readable, and good coding always begets good compsci marks. Since the instruments don't
+	actually have to act like instruments, having an abstract class and an extended class for each instrument seems
+	like overkill to me.
+	
+	
+	
+	
+THE ACCOUNT CLASS:
+
+Purpose:
+	To hold the information of whoever is currently logged in, in memory. There are two options for how to build it.
+	One, make it so that everything can be changed. We create one Account object at the start of the program and that
+	same object is used no matter how many times someone logs in or out. Two, make it so that almost nothing about
+	the object can be changed after it's created. Every time someone logs in, we create an account object. Every time
+	someone logs out, we destroy that object. Personally, I think option one is easier to work with, and if we do it
+	right it helps avoid errors.
+
+Variables:
+	-fname - a string. The current user's first name, blank if no one is logged in
+	-lname - a string. The current user's last name, blank if no one is logged in
+	-isAdmin - a boolean. True is the user has admin privileges, False if they're a regular user. Note that this wouldn't
+	be an option at registration or anything; the one admin profile to rule them all would have to be manually assigned
+	an admin through one of us editing the database.
+
+Method Ideas:
+	-toString() - it would display all relevant information, formatted nicely, much like the toString() method of the
+	instrument class I described above.
+	-idk
+
+Why I Designed it Like This:
+	It's just another information holder. It doesn't need to do anything all that fancy. Just hold stuff in one
+	convenient place. Most of the reasons I put for the instrument apply to this too.
+	
+
+	
+	
+
+ALL THE PROCESSING WE NEED TO DO:
+
+From what I can see, the easiest way to get all the data manipulation going is with methods. We have a bunch of static
+global variables --a list of instruments, the current user, etc-- and a class full of public static methods. These methods
+would be the meat of the program, the engine in it's entirety, and we would each be responsible for coding a roughly equal
+amount of these methods.
+
+I'd guess our program could have the following things:
+	-Add a user to the data file
+	-Remove a specific user from the data file
+	*-Add/remove admin privileges for an account on file (wouldn't work for the currently
+	logged in user, so that if there's a single admin they can't un-admin themselves and
+	break the program.)
+	*-Sign in an instrument
+	*-Sign out an instrument
+	*-Modify the service status of an instrument; whether it's in or out right now
+	*-Add an instrument to the data file
+	*-Remove an instrument from the data file
+	-Various retrieval methods...
+		*-A list of all instruments
+		*-A list of instruments that meet certain criteria, like sharing a name, etc
+		-A list of all users
+		*-A list of all the instruments used by a specific person
+		
+Not all of those are necessary. Probably. But it gives us a lot to work with. I've starred the ones I think are
+absolutely necessary.
+
+Some of those are definitely easier than others. If you see a job you want to do, say so, I guess? Just remember that each of
+these functions would ideally be it's own singular method.
+
+
+
+
+
+
+I AM NOW TIRED
+
+I was gonna write a spheal on file io and how we might handle that in a nice neat concise way, and then something about GUI,
+but I'm tired of writing now dammit. I'll probably add to it on the weekend or something. (Tis thursday's eve as I type) Please
+consider my above ideas, and if there's anything you have to add or change then don't hesitate to bring it up.
+
+-Erica
+
+
+
+
+

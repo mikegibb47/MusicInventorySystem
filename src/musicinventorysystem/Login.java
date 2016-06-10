@@ -232,9 +232,9 @@ public class Login extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton LoginButton;
-    private javax.swing.JPasswordField PasswordField;
+    public static javax.swing.JPasswordField PasswordField;
     private javax.swing.JButton RegisterButton;
-    private javax.swing.JTextField UsernameField;
+    public static javax.swing.JTextField UsernameField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

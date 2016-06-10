@@ -13,7 +13,10 @@ import java.awt.*;
  */
 public class RegisterPanel extends javax.swing.JPanel {
 
+    //creates booleans to show
+    //if the user has tried to register
     static Boolean regisTry = false;
+    //if the registration was successful
     static Boolean register = false;
     /**
      * Creates new form RegisterPanel

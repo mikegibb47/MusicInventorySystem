@@ -30,6 +30,8 @@ public class RegisterFrame extends javax.swing.JFrame {
      */
     public RegisterFrame() {
         initComponents();
+        userNameField.setText(Login.UsernameField.getText());
+        passwordField.setText(Login.PasswordField.getText());
     }
 
     /**
@@ -53,7 +55,7 @@ public class RegisterFrame extends javax.swing.JFrame {
         CancelButton = new javax.swing.JButton();
         registerPanel1 = new musicinventorysystem.RegisterPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Username:");
 

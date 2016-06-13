@@ -7,10 +7,11 @@ package musicinventorysystem;
 class User implements Comparable {
 
     String uName, pWord, fName, lName;
-    boolean admin;
+    boolean admin, signedOut;
 
     User(boolean admin) {
         this.admin = admin;
+        this.signedOut = false;
     }
 
     @Override

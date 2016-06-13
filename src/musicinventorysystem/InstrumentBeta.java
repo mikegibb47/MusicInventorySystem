@@ -4,7 +4,7 @@ package musicinventorysystem;
  *
  * @author Matt Gulbronson
  */
-class Instrument {
+class InstrumentBeta {
 
     enum InstrumentType {
 
@@ -28,7 +28,7 @@ class Instrument {
     String dispName;
     boolean signedOut, repair;
 
-    Instrument(int n, InstrumentType instrType) {
+    InstrumentBeta(InstrumentType instrType, int n) {
         this.num = n;
         this.dispName = instrType.name;
     }

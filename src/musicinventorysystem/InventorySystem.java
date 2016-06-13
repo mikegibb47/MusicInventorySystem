@@ -11,16 +11,27 @@ public class InventorySystem {
 
     LinkedList<User> users = new LinkedList();
     LinkedList<Instruments> instruments = new LinkedList();
+    LinkedList<Instruments> instrumentsOut = new LinkedList();
+    LinkedList<Instruments> instrumentsIn = new LinkedList();
 
     void addUser(User u) {
         users.add(u);
     }
 
     void removeUser(User u) {
-
+        users.remove(u);
     }
 
+    void addInstrument(Intrument i) {
+        instruments.add(i);
+    }
     
+    void removeInstrument(Instrument i){
+        instruments.remove(i)
+    }
+    
+    
+
     /**
      * Sorts an unsorted array of objects which implement the comparable
      * interface using the bubble-sort algorithm
@@ -39,6 +50,7 @@ public class InventorySystem {
             }
         } while (swapped);
     }
+
     /**
      * Swaps two objects in an array
      *
@@ -53,5 +65,5 @@ public class InventorySystem {
         Array.set(array, n, temp);
         return array;
     }
-    
+
 }

@@ -9,14 +9,14 @@ package musicinventorysystem;
  *
  * @author 067011551
  */
-public class StudentPanel extends javax.swing.JFrame {
+public class StudentFrame extends javax.swing.JFrame {
 
     /**
      * Creates new form StudentPanel
      */
-    public StudentPanel() {
+    public StudentFrame(User current) {
         initComponents();
-        welcomeLabel.setText("Welcome, " + User.getFirstName);
+        welcomeLabel.setText("Welcome, " + current.fName);
     }
 
     /**
@@ -141,7 +141,7 @@ public class StudentPanel extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new StudentPanel().setVisible(true);
+                new StudentFrame().setVisible(true);
             }
         });
     }

@@ -152,26 +152,32 @@ public class Login extends javax.swing.JFrame {
                 //declare the scanner to read from the file of users
                 users = new Scanner(file);
                 users.useDelimiter(",");
+                
+                User temp = new User();
                 //declare the encrypting method
                 MessageDigest mesd = MessageDigest.getInstance("SHA-256");
                 //encrypt the password
-                mesd.update((PasswordField.getText()).getBytes());
+                temp.pWord = PasswordField.getText();
+                mesd.update(temp.pWord.getBytes());
                 byte byteData[] = mesd.digest();
-                String password = "";
+                String encPassword = "";
                 for (int i = 0; i < byteData.length; ++i) {
-                    password += (Integer.toHexString((byteData[i] & 0xFF) | 0x100).substring(1, 3));
+                    encPassword += (Integer.toHexString((byteData[i] & 0xFF) | 0x100).substring(1, 3));
                 }
                 //encrypt the username
-                mesd.update((UsernameField.getText()).getBytes());
+                temp.uName = UsernameField.getText();
+                mesd.update(temp.uName.getBytes());
                 byte byteData2[] = mesd.digest();
-                String username = "";
+                String encUsername = "";
                 for (int i = 0; i < byteData2.length; ++i) {
-                    username += (Integer.toHexString((byteData2[i] & 0xFF) | 0x100).substring(1, 3));
+                    encUsername += (Integer.toHexString((byteData2[i] & 0xFF) | 0x100).substring(1, 3));
                 }
                 //check if the username and passwords match a user's
                 while (users.hasNextLine() && SuccessPanel.login == false) {
-                    if ((username + "," + password).equals(users.next() + "," + users.next())) {
+                    if ((encUsername + "," + encPassword).equals(users.next() + "," + users.next())) {
                         SuccessPanel.login = true;
+                        temp.fName = users.next();
+                        temp.lName = users.next();
                     } else {
                         SuccessPanel.login = false;
                         users.nextLine();
@@ -187,7 +193,7 @@ public class Login extends javax.swing.JFrame {
                     if (users.next().equals("f")) {
                         java.awt.EventQueue.invokeLater(new Runnable() {
                             public void run() {
-                                new StudentPanel().setVisible(true);
+                                new StudentFrame(temp).setVisible(true);
                             }
                         });
                     }

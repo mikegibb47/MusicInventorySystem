@@ -21,14 +21,21 @@ public class Login extends javax.swing.JFrame {
 
     //declare the scanner and the file of users
     Scanner users;
+    Scanner instruments;
     File file = new File("users.txt");
-    
-    
+    File file2 = new File("instruments.txt");
+
     /**
      * Creates new form Login
      */
     public Login() {
         initComponents();
+        InventorySystem sys = new InventorySystem();
+        try {
+            instruments = new Scanner(file2);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -160,7 +167,7 @@ public class Login extends javax.swing.JFrame {
                 String username = "";
                 for (int i = 0; i < byteData2.length; ++i) {
                     username += (Integer.toHexString((byteData2[i] & 0xFF) | 0x100).substring(1, 3));
-                }        
+                }
                 //check if the username and passwords match a user's
                 while (users.hasNextLine() && SuccessPanel.login == false) {
                     if ((username + "," + password).equals(users.next() + "," + users.next())) {
@@ -172,6 +179,19 @@ public class Login extends javax.swing.JFrame {
                     SuccessPanel.loginTry = true;
                     successPanel1.repaint();
                 }
+                if (SuccessPanel.login == true) {
+                    //corresponding post login window
+                    for (int i = 0; i < 2; i++) {
+                        users.next();
+                    }
+                    if (users.next().equals("f")) {
+                        java.awt.EventQueue.invokeLater(new Runnable() {
+                            public void run() {
+                                new StudentPanel().setVisible(true);
+                            }
+                        });
+                    }
+                }
             } catch (NoSuchAlgorithmException ex) {
                 //if the encrypting method can't be found return an error saying so
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
@@ -179,10 +199,6 @@ public class Login extends javax.swing.JFrame {
         } catch (FileNotFoundException ex) {
             //if the file isn't found return an error saying the file wasn't found
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        if (SuccessPanel.login == true) {
-            //corresponding post login window
         }
     }//GEN-LAST:event_LoginButtonActionPerformed
 

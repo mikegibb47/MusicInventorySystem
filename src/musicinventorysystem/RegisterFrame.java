@@ -164,6 +164,7 @@ public class RegisterFrame extends javax.swing.JFrame {
         //try to find the file of users
         try {
             users = new Scanner(file);
+            users.useDelimiter(",");
             //try to declare the writer
             try {
                 //try to find the encrypting algorithm
@@ -177,7 +178,7 @@ public class RegisterFrame extends javax.swing.JFrame {
                     for (int i = 0; i < byteData.length; ++i) {
                         password += (Integer.toHexString((byteData[i] & 0xFF) | 0x100).substring(1, 3));
                     }
-                    //encrypt the usernmae
+                    //encrypt the username
                     mesd.update((userNameField.getText()).getBytes());
                     byte byteData2[] = mesd.digest();
                     String username = "";
@@ -186,6 +187,7 @@ public class RegisterFrame extends javax.swing.JFrame {
                     }
                     //if the user has been registered already deny their registration
                     boolean found = false;
+
                     while (users.hasNextLine() && found == false) {
                         if (username.equals(users.next())) {
                             found = true;
@@ -201,16 +203,20 @@ public class RegisterFrame extends javax.swing.JFrame {
                         pwUsers = new PrintWriter(new FileWriter(file, true));
                         pwUsers.println(username + "," + password + "," + firstNameField.getText() + "," + lastNameField.getText() + ",f,f");
                         pwUsers.close();
+                        for (int i = 0; i < 4; i++) {
+                            users.next();
+                        }
+                        //if the user is a student launch the student window
+                        if (users.next().equals("f")) {
+                            java.awt.EventQueue.invokeLater(new Runnable() {
+                                public void run() {
+                                    new StudentPanel().setVisible(true);
+                                }
+                            });
+                        } else {
+
+                        }
                     }
-                    /*
-                     if (users.next().equals("f")) {
-                     java.awt.EventQueue.invokeLater(new Runnable() {
-                     public void run() {
-                     new StudentPanel().setVisible(true);
-                     }
-                     });
-                     }
-                     */
                     //display the outcome of the registration attempt
                     RegisterPanel.regisTry = true;
                     registerPanel1.repaint();

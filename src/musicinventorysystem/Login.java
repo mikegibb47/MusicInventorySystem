@@ -19,8 +19,10 @@ import java.util.logging.Logger;
  */
 public class Login extends javax.swing.JFrame {
 
+    //declare the scanner and the file of users
     Scanner users;
     File file = new File("users.txt");
+    
     
     /**
      * Creates new form Login
@@ -73,11 +75,11 @@ public class Login extends javax.swing.JFrame {
         successPanel1.setLayout(successPanel1Layout);
         successPanel1Layout.setHorizontalGroup(
             successPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+            .addGap(0, 134, Short.MAX_VALUE)
         );
         successPanel1Layout.setVerticalGroup(
             successPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 15, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -97,15 +99,14 @@ public class Login extends javax.swing.JFrame {
                             .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(successPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                                .addComponent(RegisterButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(LoginButton))
                             .addComponent(PasswordField)
-                            .addComponent(UsernameField)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addComponent(successPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
-                        .addComponent(RegisterButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(LoginButton)))
+                            .addComponent(UsernameField))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -121,43 +122,62 @@ public class Login extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(PasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(RegisterButton)
-                        .addComponent(LoginButton))
-                    .addComponent(successPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(LoginButton)
+                            .addComponent(RegisterButton))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(successPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
+        //try to find the file to read users from
         try {
+            //try to find the encrypting method
             try {
+                //declare the scanner to read from the file of users
                 users = new Scanner(file);
+                users.useDelimiter(",");
+                //declare the encrypting method
                 MessageDigest mesd = MessageDigest.getInstance("SHA-256");
+                //encrypt the password
                 mesd.update((PasswordField.getText()).getBytes());
                 byte byteData[] = mesd.digest();
                 String password = "";
                 for (int i = 0; i < byteData.length; ++i) {
                     password += (Integer.toHexString((byteData[i] & 0xFF) | 0x100).substring(1, 3));
                 }
-                
+                //encrypt the username
+                mesd.update((UsernameField.getText()).getBytes());
+                byte byteData2[] = mesd.digest();
+                String username = "";
+                for (int i = 0; i < byteData2.length; ++i) {
+                    username += (Integer.toHexString((byteData2[i] & 0xFF) | 0x100).substring(1, 3));
+                }        
+                //check if the username and passwords match a user's
                 while (users.hasNextLine() && SuccessPanel.login == false) {
-                    if ((UsernameField.getText() + "," + password).equals(users.next() + "," + users.next())) {
+                    if ((username + "," + password).equals(users.next() + "," + users.next())) {
                         SuccessPanel.login = true;
                     } else {
                         SuccessPanel.login = false;
+                        users.nextLine();
                     }
                     SuccessPanel.loginTry = true;
                     successPanel1.repaint();
                 }
             } catch (NoSuchAlgorithmException ex) {
+                //if the encrypting method can't be found return an error saying so
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (FileNotFoundException ex) {
+            //if the file isn't found return an error saying the file wasn't found
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -167,6 +187,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_LoginButtonActionPerformed
 
     private void RegisterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegisterButtonActionPerformed
+        //if the register button is pressed open the register window
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new RegisterFrame().setVisible(true);
@@ -211,9 +232,9 @@ public class Login extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton LoginButton;
-    private javax.swing.JPasswordField PasswordField;
+    public static javax.swing.JPasswordField PasswordField;
     private javax.swing.JButton RegisterButton;
-    private javax.swing.JTextField UsernameField;
+    public static javax.swing.JTextField UsernameField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

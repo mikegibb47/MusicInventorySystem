@@ -5,40 +5,42 @@
  */
 package musicinventorysystem;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 
 /**
  *
  * @author 067011551
  */
-public class SuccessPanel extends javax.swing.JPanel {
+public class RegisterPanel extends javax.swing.JPanel {
 
+    //creates booleans to show
+    //if the user has tried to register
+    static Boolean regisTry = false;
+    //if the registration was successful
+    static Boolean register = false;
     /**
-     * Creates new form SuccessPanel
+     * Creates new form RegisterPanel
      */
-    public static boolean login = false;
-    public static boolean loginTry = false;
-    
-    public SuccessPanel() {
+    public RegisterPanel() {
         initComponents();
     }
 
-    public void paintComponent(Graphics g) {
-        //display that the user needs to login or register
-        g.drawString("Login or Register", 10, 10);
-        if (loginTry == true) {
+    @Override
+    public void paintComponent(Graphics g){
+        //when the window is opened display register
+        g.drawString("Register", 10, 10);
+        if (regisTry == true) {
             super.paintComponent(g);
-            //if the login is successful display that
-            if (login == true) {
+            if (register == true) {
+                //if the registration is successful display that
                 g.setColor(Color.BLUE);
-                g.drawString("Login: Successful", 10, 10);
+                g.drawString("Registration: Successful", 0, 10);
             } else {
-                //if the login is unsuccessful display that
+                //if the registration is unsuccessful display that
                 g.setColor(Color.RED);
-                g.drawString("Login: Unsuccessful", 10, 10);
+                g.drawString("Registration: Unsuccessful", 0, 10);
             }
-            loginTry = false;
+            regisTry = false;
         }
     }
     /**

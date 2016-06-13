@@ -5,17 +5,33 @@
  */
 package musicinventorysystem;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author 067011551
  */
 public class RegisterFrame extends javax.swing.JFrame {
 
+    //declare the file of users
+    File file = new File("users.txt");
+
     /**
      * Creates new form RegisterFrame
      */
     public RegisterFrame() {
         initComponents();
+        userNameField.setText(Login.UsernameField.getText());
+        passwordField.setText(Login.PasswordField.getText());
     }
 
     /**
@@ -37,8 +53,9 @@ public class RegisterFrame extends javax.swing.JFrame {
         lastNameField = new javax.swing.JTextField();
         RegisterButton = new javax.swing.JButton();
         CancelButton = new javax.swing.JButton();
+        registerPanel1 = new musicinventorysystem.RegisterPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Username:");
 
@@ -49,8 +66,29 @@ public class RegisterFrame extends javax.swing.JFrame {
         jLabel4.setText("Last Name:");
 
         RegisterButton.setText("Register");
+        RegisterButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RegisterButtonActionPerformed(evt);
+            }
+        });
 
         CancelButton.setText("Cancel");
+        CancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout registerPanel1Layout = new javax.swing.GroupLayout(registerPanel1);
+        registerPanel1.setLayout(registerPanel1Layout);
+        registerPanel1Layout.setHorizontalGroup(
+            registerPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 146, Short.MAX_VALUE)
+        );
+        registerPanel1Layout.setVerticalGroup(
+            registerPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -68,18 +106,20 @@ public class RegisterFrame extends javax.swing.JFrame {
                         .addGap(23, 23, 23)
                         .addComponent(passwordField))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(18, 18, 18)
-                        .addComponent(lastNameField))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(21, 21, 21)
                         .addComponent(userNameField))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 236, Short.MAX_VALUE)
-                        .addComponent(CancelButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(RegisterButton)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(registerPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(CancelButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(RegisterButton))
+                            .addComponent(lastNameField))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -101,15 +141,97 @@ public class RegisterFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(lastNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(RegisterButton)
-                    .addComponent(CancelButton))
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(RegisterButton)
+                            .addComponent(CancelButton))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(registerPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void RegisterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegisterButtonActionPerformed
+        //declare the writer that will write to the file of users
+        PrintWriter pwUsers;
+        //declare the scanner to read from the file of users
+        Scanner users;
+        //try to find the file of users
+        try {
+            users = new Scanner(file);
+            //try to declare the writer
+            try {
+                //try to find the encrypting algorithm
+                try {
+                    //declare the encrypting method
+                    MessageDigest mesd = MessageDigest.getInstance("SHA-256");
+                    //encrypt the password
+                    mesd.update((passwordField.getText()).getBytes());
+                    byte byteData[] = mesd.digest();
+                    String password = "";
+                    for (int i = 0; i < byteData.length; ++i) {
+                        password += (Integer.toHexString((byteData[i] & 0xFF) | 0x100).substring(1, 3));
+                    }
+                    //encrypt the usernmae
+                    mesd.update((userNameField.getText()).getBytes());
+                    byte byteData2[] = mesd.digest();
+                    String username = "";
+                    for (int i = 0; i < byteData2.length; ++i) {
+                        username += (Integer.toHexString((byteData2[i] & 0xFF) | 0x100).substring(1, 3));
+                    }
+                    //if the user has been registered already deny their registration
+                    boolean found = false;
+                    while (users.hasNextLine() && found == false) {
+                        if (username.equals(users.next())) {
+                            found = true;
+                        } else if (users.hasNextLine()) {
+                            users.nextLine();
+                        }
+                    }
+                    if (found == false) {
+                        RegisterPanel.register = true;
+                    }
+                    if (RegisterPanel.register == true) {
+                        //write the information to the file
+                        pwUsers = new PrintWriter(new FileWriter(file, true));
+                        pwUsers.println(username + "," + password + "," + firstNameField.getText() + "," + lastNameField.getText() + ",f,f");
+                        pwUsers.close();
+                    }
+                    /*
+                     if (users.next().equals("f")) {
+                     java.awt.EventQueue.invokeLater(new Runnable() {
+                     public void run() {
+                     new StudentPanel().setVisible(true);
+                     }
+                     });
+                     }
+                     */
+                    //display the outcome of the registration attempt
+                    RegisterPanel.regisTry = true;
+                    registerPanel1.repaint();
+                } catch (NoSuchAlgorithmException ex) {
+                    //if the encrypting algorithm can't be found return an error saying so
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } catch (IOException ex) {
+                //if it can't declare the writer return an error saying so
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (FileNotFoundException ex) {
+            //if the file isn't found return an error saying so
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_RegisterButtonActionPerformed
+
+    private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
+        //if the cancel button is pushed close the window
+        setVisible(false);
+    }//GEN-LAST:event_CancelButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -156,6 +278,7 @@ public class RegisterFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JTextField lastNameField;
     private javax.swing.JPasswordField passwordField;
+    private musicinventorysystem.RegisterPanel registerPanel1;
     private javax.swing.JTextField userNameField;
     // End of variables declaration//GEN-END:variables
 }

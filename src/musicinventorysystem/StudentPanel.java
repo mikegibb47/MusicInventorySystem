@@ -16,7 +16,7 @@ public class StudentPanel extends javax.swing.JFrame {
      */
     public StudentPanel() {
         initComponents();
-        //welcomeLabel.setText("Welcome, " + User.getFirstName);
+        welcomeLabel.setText("Welcome, " + User.getFirstName);
     }
 
     /**

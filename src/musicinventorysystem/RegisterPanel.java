@@ -34,11 +34,11 @@ public class RegisterPanel extends javax.swing.JPanel {
             if (register == true) {
                 //if the registration is successful display that
                 g.setColor(Color.BLUE);
-                g.drawString("Registration: Successful", 10, 10);
+                g.drawString("Registration: Successful", 0, 10);
             } else {
                 //if the registration is unsuccessful display that
                 g.setColor(Color.RED);
-                g.drawString("Registration: Unsuccessful", 10, 10);
+                g.drawString("Registration: Unsuccessful", 0, 10);
             }
             regisTry = false;
         }

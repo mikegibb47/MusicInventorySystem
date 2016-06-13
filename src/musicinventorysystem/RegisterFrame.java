@@ -184,18 +184,33 @@ public class RegisterFrame extends javax.swing.JFrame {
                     for (int i = 0; i < byteData2.length; ++i) {
                         username += (Integer.toHexString((byteData2[i] & 0xFF) | 0x100).substring(1, 3));
                     }
-                    //write the information to the file
-                    pwUsers = new PrintWriter(new FileWriter(file, true));
-                    pwUsers.println(username + "," + password + "," + firstNameField.getText() + "," + lastNameField.getText());
-                    pwUsers.close();
                     //if the user has been registered already deny their registration
-                    while (users.hasNextLine() && RegisterPanel.register == false) {
-                        if ((username.equals(users.next()))) {
-                            RegisterPanel.register = false;
-                        } else {
-                            RegisterPanel.register = true;
+                    boolean found = false;
+                    while (users.hasNextLine() && found == false) {
+                        if (username.equals(users.next())) {
+                            found = true;
+                        } else if (users.hasNextLine()) {
+                            users.nextLine();
                         }
                     }
+                    if (found == false) {
+                        RegisterPanel.register = true;
+                    }
+                    if (RegisterPanel.register == true) {
+                        //write the information to the file
+                        pwUsers = new PrintWriter(new FileWriter(file, true));
+                        pwUsers.println(username + "," + password + "," + firstNameField.getText() + "," + lastNameField.getText() + ",f,f");
+                        pwUsers.close();
+                    }
+                    /*
+                     if (users.next().equals("f")) {
+                     java.awt.EventQueue.invokeLater(new Runnable() {
+                     public void run() {
+                     new StudentPanel().setVisible(true);
+                     }
+                     });
+                     }
+                     */
                     //display the outcome of the registration attempt
                     RegisterPanel.regisTry = true;
                     registerPanel1.repaint();

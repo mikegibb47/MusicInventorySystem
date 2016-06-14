@@ -13,9 +13,8 @@ public class Instrument {
 	it will contain the string represented by the public static constant Instrument.OUT_FOR_SERVICE.
 	@see Instrument.OUT_FOR_SERVICE*/
 	private String curUser;
-	/**An int that holds some kind of unique identifier number, different for every
-	registered instrument, to tell apart instruments with the same name.*/
-	private int id;
+	/**A barcode that acts as a unique identifier for each individual instrument.*/
+	private String id;
 	/**A boolean value tracking whether the instrument is in or out. True if it's ready to go,
 	False if it's been signed out or if it's out for service.*/
 	private boolean isAvailable;
@@ -27,7 +26,7 @@ public class Instrument {
 	
 	/**Creates a new instrument object with all the necessary variables.
 	@param name - the name of the instrument, ex "Clarinet" or "Trumpet".
-	@param id - some kind of unique identifier number, must be different for every registered instrument.
+	@param id - A barcode that acts as a unique identifier for each individual instrument.
 	@param isAvailable - A boolean value tracking whether the instrument is in or out. True if it's ready to go,
 	False if it's been signed out or if it's out for service.
 	@param curUser - If the instrument is available, this string should be empty. If the instrument has been
@@ -35,7 +34,7 @@ public class Instrument {
 	it will contain the string represented by the public static constant Instrument.OUT_FOR_SERVICE.
 	@param userHist - a single string containing the names of all the people who have used this instrument in
 	the past, delimited by commas.*/
-	public Instrument(String name, int id, boolean isAvailable, String curUser, String userHist){
+	public Instrument(String name, String id, boolean isAvailable, String curUser, String userHist){
 		this.name = name;
 		this.id = id;
 		this.isAvailable = isAvailable;
@@ -53,6 +52,10 @@ public class Instrument {
 	public String getCurrentUser(){
 		return curUser;
 	}
+        /**@return the unique barcode of this instrument*/
+        public String getID(){
+            return id;
+        }
 	
 	/**Allows the instrument to be signed out. This registers the name of whoever is signing it out and marks
 	the instrument as unavailable.*/

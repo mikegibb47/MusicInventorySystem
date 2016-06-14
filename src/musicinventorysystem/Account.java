@@ -1,4 +1,4 @@
-package stuff;
+package musicinventorysystem;
 
 public class Account {
 	/**A string. The first name of the account holder*/

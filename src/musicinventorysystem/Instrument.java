@@ -1,4 +1,4 @@
-package stuff;
+package musicinventorysystem;
 
 import java.util.Arrays;
 import java.util.List;

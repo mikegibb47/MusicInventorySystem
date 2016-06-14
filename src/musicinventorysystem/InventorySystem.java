@@ -11,9 +11,9 @@ public class InventorySystem {
 
     static Account testUser;
     static LinkedList<User> users = new LinkedList();
-    static LinkedList<Instruments> instruments = new LinkedList();
-    static LinkedList<Instruments> instrumentsOut = new LinkedList();
-    static LinkedList<Instruments> instrumentsIn = new LinkedList();
+    static LinkedList<Instrument> instruments = new LinkedList();
+    static LinkedList<Instrument> instrumentsOut = new LinkedList();
+    static LinkedList<Instrument> instrumentsIn = new LinkedList();
     
     public static void main(String[] args) {
 	testUser = new Account("TheMighty", "Admin", true, false);
@@ -41,7 +41,7 @@ public class InventorySystem {
     }
     
     void removeInstrument(Instrument i){
-        instruments.remove(i)
+        instruments.remove(i);
     }
     
     

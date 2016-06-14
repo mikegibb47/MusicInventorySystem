@@ -17,9 +17,9 @@ public class AdminFrame extends javax.swing.JFrame {
     public AdminFrame() {
         initComponents();
         for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < ; j++) {
-                instrumentTable.setValueAt(instrumentTable, WIDTH, WIDTH);
-            }
+ //           for (int j = 0; j < ; j++) {
+ //               instrumentTable.setValueAt(instrumentTable, WIDTH, WIDTH);
+  //          }
         }
     }
 

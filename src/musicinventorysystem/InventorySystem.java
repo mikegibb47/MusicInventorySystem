@@ -10,7 +10,7 @@ import java.lang.reflect.Array;
 public class InventorySystem {
 
     static Account testUser;
-    static LinkedList<User> users = new LinkedList();
+    static LinkedList<Account> users = new LinkedList();
     static LinkedList<Instrument> instruments = new LinkedList();
     static LinkedList<Instrument> instrumentsOut = new LinkedList();
     static LinkedList<Instrument> instrumentsIn = new LinkedList();

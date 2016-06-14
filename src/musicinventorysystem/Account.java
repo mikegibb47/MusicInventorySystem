@@ -12,6 +12,7 @@ public class Account {
 	/**A boolean. True if the user has an instrument currently signed out. False if they do not.*/
 	private boolean isUsingInstrument;
 	
+        
 	/**Creates a new account object using the built in openNewUser() method.
 	@param fname - the first name of the logged in user
 	@param lname - the last name of the logged in user

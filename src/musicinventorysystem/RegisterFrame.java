@@ -165,31 +165,34 @@ public class RegisterFrame extends javax.swing.JFrame {
         try {
             users = new Scanner(file);
             users.useDelimiter(",");
+            Account temp = new Account();
             //try to declare the writer
             try {
                 //try to find the encrypting algorithm
                 try {
+                    temp.setPassword(passwordField.getText());
                     //declare the encrypting method
                     MessageDigest mesd = MessageDigest.getInstance("SHA-256");
                     //encrypt the password
-                    mesd.update((passwordField.getText()).getBytes());
+                    mesd.update(temp.getPassword().getBytes());
                     byte byteData[] = mesd.digest();
-                    String password = "";
+                    String encPassword = "";
                     for (int i = 0; i < byteData.length; ++i) {
-                        password += (Integer.toHexString((byteData[i] & 0xFF) | 0x100).substring(1, 3));
+                        encPassword += (Integer.toHexString((byteData[i] & 0xFF) | 0x100).substring(1, 3));
                     }
+                    temp.setUsername(userNameField.getText());
                     //encrypt the username
-                    mesd.update((userNameField.getText()).getBytes());
+                    mesd.update(temp.getUsername).getBytes());
                     byte byteData2[] = mesd.digest();
-                    String username = "";
+                    String encUsername = "";
                     for (int i = 0; i < byteData2.length; ++i) {
-                        username += (Integer.toHexString((byteData2[i] & 0xFF) | 0x100).substring(1, 3));
+                        encUsername += (Integer.toHexString((byteData2[i] & 0xFF) | 0x100).substring(1, 3));
                     }
                     //if the user has been registered already deny their registration
                     boolean found = false;
 
                     while (users.hasNextLine() && found == false) {
-                        if (username.equals(users.next())) {
+                        if (encUsername.equals(users.next())) {
                             found = true;
                         } else if (users.hasNextLine()) {
                             users.nextLine();
@@ -201,20 +204,24 @@ public class RegisterFrame extends javax.swing.JFrame {
                     if (RegisterPanel.register == true) {
                         //write the information to the file
                         pwUsers = new PrintWriter(new FileWriter(file, true));
-                        pwUsers.println(username + "," + password + "," + firstNameField.getText() + "," + lastNameField.getText() + ",f,f");
+                        pwUsers.println(encUsername + "," + encPassword + "," + firstNameField.getText() + "," + lastNameField.getText() + ",f,f");
                         pwUsers.close();
-                        for (int i = 0; i < 4; i++) {
-                            users.next();
-                        }
+                        users.next();
+                        temp.setFirstName(users.next());
+                        temp.setLastName(users.next());
                         //if the user is a student launch the student window
                         if (users.next().equals("f")) {
                             java.awt.EventQueue.invokeLater(new Runnable() {
                                 public void run() {
-                                    new StudentPanel().setVisible(true);
+                                    new StudentFrame(temp).setVisible(true);
                                 }
                             });
                         } else {
-
+                            java.awt.EventQueue.invokeLater(new Runnable() {
+                                public void run() {
+                                    new AdminFrame(temp).setVisible(true);
+                                }
+                            });
                         }
                     }
                     //display the outcome of the registration attempt
@@ -238,41 +245,6 @@ public class RegisterFrame extends javax.swing.JFrame {
         //if the cancel button is pushed close the window
         setVisible(false);
     }//GEN-LAST:event_CancelButtonActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RegisterFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RegisterFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RegisterFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RegisterFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new RegisterFrame().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CancelButton;

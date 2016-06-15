@@ -18,7 +18,6 @@ public class Account implements Comparable {
 	
 	/**A string. The first name of the account holder*/
 	private String fname;
-	
 	/**A string. The last name of the account holder*/
 	private String lname;
 
@@ -32,7 +31,6 @@ public class Account implements Comparable {
 	be an option at registration or anything; the one admin profile to rule them all would have to be manually assigned
 	an admin through one of us editing the database.*/
 	private boolean admin;
-	
 	/**A boolean. True if the user has an instrument currently signed out. False if they do not.*/
 	private boolean isUsingInstrument;
         

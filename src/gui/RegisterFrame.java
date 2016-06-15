@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package musicinventorysystem;
+package gui;
 
+import gui.StudentFrame;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -30,8 +31,8 @@ public class RegisterFrame extends javax.swing.JFrame {
      */
     public RegisterFrame() {
         initComponents();
-        userNameField.setText(Login.UsernameField.getText());
-        passwordField.setText(Login.PasswordField.getText());
+        userNameField.setText(gui.Login.UsernameField.getText());
+        passwordField.setText(gui.Login.PasswordField.getText());
     }
 
     /**
@@ -169,6 +170,8 @@ public class RegisterFrame extends javax.swing.JFrame {
             try {
                 //try to find the encrypting algorithm
                 try {
+                    
+                    Account user = new Account();
                     //declare the encrypting method
                     MessageDigest mesd = MessageDigest.getInstance("SHA-256");
                     //encrypt the password
@@ -177,13 +180,6 @@ public class RegisterFrame extends javax.swing.JFrame {
                     String password = "";
                     for (int i = 0; i < byteData.length; ++i) {
                         password += (Integer.toHexString((byteData[i] & 0xFF) | 0x100).substring(1, 3));
-                    }
-                    //encrypt the username
-                    mesd.update((userNameField.getText()).getBytes());
-                    byte byteData2[] = mesd.digest();
-                    String username = "";
-                    for (int i = 0; i < byteData2.length; ++i) {
-                        username += (Integer.toHexString((byteData2[i] & 0xFF) | 0x100).substring(1, 3));
                     }
                     //if the user has been registered already deny their registration
                     boolean found = false;
@@ -203,34 +199,28 @@ public class RegisterFrame extends javax.swing.JFrame {
                         pwUsers = new PrintWriter(new FileWriter(file, true));
                         pwUsers.println(username + "," + password + "," + firstNameField.getText() + "," + lastNameField.getText() + ",f,f");
                         pwUsers.close();
-                        for (int i = 0; i < 4; i++) {
-                            users.next();
-                        }
-                        //if the user is a student launch the student window
-                        if (users.next().equals("f")) {
-                            java.awt.EventQueue.invokeLater(new Runnable() {
-                                public void run() {
-                                    new StudentPanel().setVisible(true);
-                                }
-                            });
-                        } else {
-
-                        }
+                        Account user = new Account();
+                        //launch the student window
+                        java.awt.EventQueue.invokeLater(new Runnable() {
+                            public void run() {
+                                new StudentFrame().setVisible(true);
+                            }
+                        });
                     }
                     //display the outcome of the registration attempt
                     RegisterPanel.regisTry = true;
                     registerPanel1.repaint();
                 } catch (NoSuchAlgorithmException ex) {
                     //if the encrypting algorithm can't be found return an error saying so
-                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(RegisterFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } catch (IOException ex) {
                 //if it can't declare the writer return an error saying so
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(RegisterFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (FileNotFoundException ex) {
             //if the file isn't found return an error saying so
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RegisterFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_RegisterButtonActionPerformed
 

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package musicinventorysystem;
+package gui;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,6 +12,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import musicinventorysystem.Account;
+import musicinventorysystem.InventorySystem;
 
 /**
  *
@@ -19,20 +21,30 @@ import java.util.logging.Logger;
  */
 public class Login extends javax.swing.JFrame {
 
-    //declare the scanner and the file of users
+    //declare the scanner and the file of users and instruments
     Scanner users;
     Scanner instruments;
     File file = new File("users.txt");
     File file2 = new File("instruments.txt");
+    //declare the methods class
+    InventorySystem sys = new InventorySystem(file, file2);
 
     /**
      * Creates new form Login
      */
     public Login() {
         initComponents();
-        InventorySystem sys = new InventorySystem();
+        //declare the instruments scanner
         try {
             instruments = new Scanner(file2);
+            users.useDelimiter(",");
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //declare the users scanner
+        try {
+            users = new Scanner(file);
+            users.useDelimiter(",");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -145,67 +157,49 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
-        //try to find the file to read users from
+        //try to find the encrypting method
         try {
-            //try to find the encrypting method
-            try {
-                //declare the scanner to read from the file of users
-                users = new Scanner(file);
-                users.useDelimiter(",");
-                
-                User temp = new User();
-                //declare the encrypting method
-                MessageDigest mesd = MessageDigest.getInstance("SHA-256");
-                //encrypt the password
-                temp.pWord = PasswordField.getText();
-                mesd.update(temp.pWord.getBytes());
-                byte byteData[] = mesd.digest();
-                String encPassword = "";
-                for (int i = 0; i < byteData.length; ++i) {
-                    encPassword += (Integer.toHexString((byteData[i] & 0xFF) | 0x100).substring(1, 3));
-                }
-                //encrypt the username
-                temp.uName = UsernameField.getText();
-                mesd.update(temp.uName.getBytes());
-                byte byteData2[] = mesd.digest();
-                String encUsername = "";
-                for (int i = 0; i < byteData2.length; ++i) {
-                    encUsername += (Integer.toHexString((byteData2[i] & 0xFF) | 0x100).substring(1, 3));
-                }
-                //check if the username and passwords match a user's
-                while (users.hasNextLine() && SuccessPanel.login == false) {
-                    if ((encUsername + "," + encPassword).equals(users.next() + "," + users.next())) {
-                        SuccessPanel.login = true;
-                        temp.fName = users.next();
-                        temp.lName = users.next();
-                    } else {
-                        SuccessPanel.login = false;
-                        users.nextLine();
-                    }
-                    SuccessPanel.loginTry = true;
-                    successPanel1.repaint();
-                }
-                if (SuccessPanel.login == true) {
-                    //corresponding post login window
-                    for (int i = 0; i < 2; i++) {
-                        users.next();
-                    }
-                    if (users.next().equals("f")) {
-                        java.awt.EventQueue.invokeLater(new Runnable() {
-                            public void run() {
-                                new StudentFrame(temp).setVisible(true);
-                            }
-                        });
-                    }
-                }
-            } catch (NoSuchAlgorithmException ex) {
-                //if the encrypting method can't be found return an error saying so
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            String tempU = UsernameField.getText();
+            sys.binarySearch(tempU, );
+            Account temp = new Account();
+            //declare the encrypting method
+            MessageDigest mesd = MessageDigest.getInstance("SHA-256");
+            //encrypt the password
+            mesd.update(temp.getPassword().getBytes());
+            byte byteData[] = mesd.digest();
+            String encPassword = "";
+            for (int i = 0; i < byteData.length; ++i) {
+                encPassword += (Integer.toHexString((byteData[i] & 0xFF) | 0x100).substring(1, 3));
             }
-        } catch (FileNotFoundException ex) {
-            //if the file isn't found return an error saying the file wasn't found
+            //check if the username and passwords match a user's
+            while (users.hasNextLine() && SuccessPanel.login == false) {
+                if ((temp.getUsername() + "," + encPassword).equals(users.next() + "," + users.next())) {
+                    SuccessPanel.login = true;
+                } else {
+                    SuccessPanel.login = false;
+                    users.nextLine();
+                }
+                SuccessPanel.loginTry = true;
+                successPanel1.repaint();
+            }
+            if (SuccessPanel.login == true) {
+                //corresponding post login window
+                for (int i = 0; i < 2; i++) {
+                    users.next();
+                }
+                if (users.next().equals("f")) {
+                    java.awt.EventQueue.invokeLater(new Runnable() {
+                        public void run() {
+                            new StudentFrame(temp).setVisible(true);
+                        }
+                    });
+                }
+            }
+        } catch (NoSuchAlgorithmException ex) {
+            //if the encrypting method can't be found return an error saying so
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }//GEN-LAST:event_LoginButtonActionPerformed
 
     private void RegisterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegisterButtonActionPerformed

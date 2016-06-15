@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package musicinventorysystem;
+package gui;
+
+import musicinventorysystem.Account;
 
 /**
  *
@@ -14,9 +16,9 @@ public class StudentFrame extends javax.swing.JFrame {
     /**
      * Creates new form StudentPanel
      */
-    public StudentFrame(User current) {
+    public StudentFrame(Account current) {
         initComponents();
-        welcomeLabel.setText("Welcome, " + current.fName);
+        welcomeLabel.setText("Welcome, " + current.getFirstName());
     }
 
     /**
@@ -141,7 +143,7 @@ public class StudentFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                //new StudentFrame().setVisible(true);
+                new StudentFrame().setVisible(true);
             }
         });
     }

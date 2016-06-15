@@ -1,5 +1,6 @@
 package musicinventorysystem;
 
+import java.io.File;
 import java.util.List;
 import java.lang.reflect.Array;
 
@@ -35,7 +36,7 @@ public class InventorySystem {
 	//////////////////////////
 	
 	public InventorySystem(File userFile, File instrumentFile) {
-		users = new List<Account>();
+		users = new List<Account>() {};
 		instruments = new List<Instrument>();
 
 		// BELOW IS DUMMY DATA, FOR TESTING ONLY. The files will have to be read from to get the real data.

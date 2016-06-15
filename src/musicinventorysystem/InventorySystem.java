@@ -65,7 +65,7 @@ public class InventorySystem {
 	
 	/**Used to retrieve a list of all the instruments a specific student has used in the past.
 	 * @author Erica Garand*/
-	public List<Instrument> getStudentSignoutHistory(){
+	public List<Instrument> getStudentSignoutHistory(Account u){
 		return null;
 	}
 
@@ -78,7 +78,7 @@ public class InventorySystem {
 	/**Used to retrieve a list of all the users currently used.
 	 * @author Erica Garand*/
 	public Account getLoggedInUser(){
-		if( currentUser >= 0 && currentUser <users.size() )
+		if( currentUser >= 0 && currentUser < users.size() )
 			return users.get(currentUser);
 		return null;
 	}
@@ -93,14 +93,16 @@ public class InventorySystem {
      * @param u - The Account object to be added to the list. Should be newly created, as
      * Account objects are largely unchangeable once created. */
 	public void addUser(Account u){
-		//stuff
+		users.add(u);
 	}
 
 	/**Allows an admin profile to manually remove a user from the user file, if necessary.
 	 * @author Erica Garand*/
 	public void removeUser(Account u){
 		if( currentUser >= 0 && currentUser < users.size() && users.get(currentUser).isAdmin() == true ){
-			//stuff
+			int index = binarySearch(u, (List)users);
+                        if (index >= 0 && index != currentUser)
+                            users.remove(index);
 		}
 	}
 
@@ -116,7 +118,10 @@ public class InventorySystem {
 	 * @author Erica Garand*/
 	public void removeInstrument(String barcode){
 		if( currentUser >= 0 && currentUser < users.size() && users.get(currentUser).isAdmin() == true ){
-			//stuff
+			Instrument temp = new Instrument("", barcode, false, "", "");
+                        int index = binarySearch(temp, (List)instruments);
+                        if (index >= 0 && instruments.get(index).isAvailable() == true)
+                            instruments.remove(index);
 		}
 	}
 
@@ -124,7 +129,10 @@ public class InventorySystem {
 	 * @author Erica Garand*/
 	public void serviceAnInstrument(String barcode){
 		if( currentUser >= 0 && currentUser < users.size() && users.get(currentUser).isAdmin() == true ){
-			//stuff
+			Instrument temp = new Instrument("", barcode, false, "", "");
+                        int index = binarySearch(temp, (List)instruments);
+                        if (index >= 0 && instruments.get(index).isAvailable() == true)
+                            instruments.get(index).service();
 		}
 	}
 
@@ -132,7 +140,10 @@ public class InventorySystem {
 	 * @author Erica Garand*/
 	public void signOutInstrument(String barcode){
 		if( currentUser >= 0 && currentUser < users.size() ){
-			//stuff
+			Instrument temp = new Instrument("", barcode, false, "", "");
+                        int index = binarySearch(temp, (List)instruments);
+                        if (index >= 0 && instruments.get(index).isAvailable() == true)
+                            instruments.get(index).signOut(users.get(currentUser).getUsername());
 		}
 	}
 
@@ -140,7 +151,10 @@ public class InventorySystem {
 	 * @author Erica Garand*/
 	public void signInInstrument(String barcode){
 		if( currentUser >= 0 && currentUser < users.size() ){
-			//stuff
+			Instrument temp = new Instrument("", barcode, false, "", "");
+                        int index = binarySearch(temp, (List)instruments);
+                        if (index >= 0 && instruments.get(index).isAvailable() == false)
+                            instruments.get(index).signIn();
 		}
 	}
 	

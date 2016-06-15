@@ -5,7 +5,6 @@
  */
 package gui;
 
-import gui.StudentFrame;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -16,6 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import musicinventorysystem.Account;
 
 /**
  *
@@ -170,8 +170,6 @@ public class RegisterFrame extends javax.swing.JFrame {
             try {
                 //try to find the encrypting algorithm
                 try {
-                    
-                    Account user = new Account();
                     //declare the encrypting method
                     MessageDigest mesd = MessageDigest.getInstance("SHA-256");
                     //encrypt the password
@@ -183,7 +181,7 @@ public class RegisterFrame extends javax.swing.JFrame {
                     }
                     //if the user has been registered already deny their registration
                     boolean found = false;
-
+                    String username = userNameField.getText();
                     while (users.hasNextLine() && found == false) {
                         if (username.equals(users.next())) {
                             found = true;
@@ -203,7 +201,7 @@ public class RegisterFrame extends javax.swing.JFrame {
                         //launch the student window
                         java.awt.EventQueue.invokeLater(new Runnable() {
                             public void run() {
-                                new StudentFrame().setVisible(true);
+                                new StudentFrame(user).setVisible(true);
                             }
                         });
                     }
@@ -228,41 +226,6 @@ public class RegisterFrame extends javax.swing.JFrame {
         //if the cancel button is pushed close the window
         setVisible(false);
     }//GEN-LAST:event_CancelButtonActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RegisterFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RegisterFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RegisterFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RegisterFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new RegisterFrame().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CancelButton;

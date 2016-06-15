@@ -27,7 +27,7 @@ public class Login extends javax.swing.JFrame {
     File file = new File("users.txt");
     File file2 = new File("instruments.txt");
     //declare the methods class
-    InventorySystem sys = new InventorySystem(file, file2);
+    InventorySystem sys = new InventorySystem();
 
     /**
      * Creates new form Login

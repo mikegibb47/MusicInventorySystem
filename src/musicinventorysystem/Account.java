@@ -94,7 +94,6 @@ public class Account implements Comparable {
 	///////////////////////////
 	////// OTHER METHODS //////
 	///////////////////////////
-	///////////////////////////	
 	
 	/**Compares two accounts. If both the username and the password match, the accounts match. Otherwise, just the
 	 * usernames are compared to see which Account is "less" or "greater". Default case is less than.

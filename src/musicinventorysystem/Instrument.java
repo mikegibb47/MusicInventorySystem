@@ -95,7 +95,7 @@ public class Instrument implements Comparable {
 	
 	/**@return the name and id (unique identifier) of the instrument, followed by whoever is using it, if anyone.*/
 	public String toString(){
-		return String.format("%s%10d%25s", name, id, curUser);
+		return String.format("%s%10s%25s", name, id, curUser);
 	}
 	
 	
@@ -143,7 +143,7 @@ public class Instrument implements Comparable {
 			throw new IllegalArgumentException("You cannot compare any random object to an Instrument.");
 		Instrument a = (Instrument)o;
 		
-		return (this.getID().compareTo(a.getID()))
+		return (this.getID().compareTo(a.getID()));
 	}
 
 }

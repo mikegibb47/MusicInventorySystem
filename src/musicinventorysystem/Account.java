@@ -92,18 +92,7 @@ public class Account implements Comparable {
 	
 	///////////////////////////
 	////// OTHER METHODS //////
-	///////////////////////////
-
-	/**Compares two accounts by matching the first and last names of the account holders.
-	 * @param o - The Account object to compare to this one.*/
-	public int compareTo(Object o) {
-		if (o.getClass() != Account.class)
-			throw new IllegalArgumentException("You cannot compare any random object to an Account.");
-		Account a = (Account)o;
-		
-		return ((fname + " " + lname).compareTo(a.getFirstName() + " " + a.getLastName() == 0));
-	}
-	
+	///////////////////////////	
 	
 	/**Compares two accounts. If both the username and the password match, the accounts match. Otherwise, just the
 	 * usernames are compared to see which Account is "less" or "greater". Default case is less than.
@@ -115,9 +104,9 @@ public class Account implements Comparable {
 		
 		if (this.getUsername().equals(a.getUsername()) == true && this.getPassword().equals(a.getPassword()) == true)
 			return 0;
-		else if (this.getUsername().compareTo(a.getUsername) < 0)
+		else if (this.getUsername().compareTo(a.getUsername()) < 0)
 			return -1;
-		else if (this.getUsername().compareTo(a.getUsername) > 0)
+		else if (this.getUsername().compareTo(a.getUsername()) > 0)
 			return 1;
 		else
 			return -1;

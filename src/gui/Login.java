@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -159,29 +160,26 @@ public class Login extends javax.swing.JFrame {
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
         //try to find the encrypting method
         try {
-            String tempU = UsernameField.getText();
-            sys.binarySearch(tempU, );
-            Account temp = new Account();
             //declare the encrypting method
             MessageDigest mesd = MessageDigest.getInstance("SHA-256");
             //encrypt the password
-            mesd.update(temp.getPassword().getBytes());
+            mesd.update(PasswordField.getText().getBytes());
             byte byteData[] = mesd.digest();
             String encPassword = "";
             for (int i = 0; i < byteData.length; ++i) {
                 encPassword += (Integer.toHexString((byteData[i] & 0xFF) | 0x100).substring(1, 3));
             }
+            Account temp = new Account(UsernameField.getText(), encPassword, "", "", false, false);
+            int locate = sys.binarySearch(temp, (List) sys.getUserList());
             //check if the username and passwords match a user's
-            while (users.hasNextLine() && SuccessPanel.login == false) {
-                if ((temp.getUsername() + "," + encPassword).equals(users.next() + "," + users.next())) {
-                    SuccessPanel.login = true;
-                } else {
-                    SuccessPanel.login = false;
-                    users.nextLine();
-                }
-                SuccessPanel.loginTry = true;
-                successPanel1.repaint();
+            if (locate != -1) {
+                SuccessPanel.login = true;
+            } else {
+                SuccessPanel.login = false;
             }
+            SuccessPanel.loginTry = true;
+            successPanel1.repaint();
+
             if (SuccessPanel.login == true) {
                 //corresponding post login window
                 for (int i = 0; i < 2; i++) {
@@ -191,6 +189,12 @@ public class Login extends javax.swing.JFrame {
                     java.awt.EventQueue.invokeLater(new Runnable() {
                         public void run() {
                             new StudentFrame(temp).setVisible(true);
+                        }
+                    });
+                } else {
+                    java.awt.EventQueue.invokeLater(new Runnable() {
+                        public void run() {
+                            new AdminFrame().setVisible(true);
                         }
                     });
                 }

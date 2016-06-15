@@ -3,7 +3,6 @@ package musicinventorysystem;
 import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
-import java.lang.reflect.Array;
 import java.util.Collections;
 
 /* TABLE OF CONTENTS (Use ctrl+f to navigate, case sensitive)
@@ -52,7 +51,7 @@ public class InventorySystem {
 		users.add(new Account("John", "Doe", "mysteryman", "whoami", false, true));
 		users.add(new Account("TheMighty", "AdminGuy", "rulerofall","sauron", true, false));
 		
-		instruments = bubbleSort((List) instruments);
+		instruments = bubbleSort((List)instruments);
 		users = bubbleSort((List)users);
                 
                 for (int i = 0; i < instruments.size();i++)
@@ -183,7 +182,7 @@ public class InventorySystem {
 	 * @param unsorted - the array of comparable objects to be sorted
 	 * @author Matthew Gulbronson
 	 */
-	public List<Comparable> bubbleSort(List<Comparable> unsorted) {
+	public static List<Comparable> bubbleSort(List<Comparable> unsorted) {
 		boolean swapped;
 		do {
 			swapped = false;
@@ -200,7 +199,8 @@ public class InventorySystem {
 	
 	/**Does a binary search for an item in an array of items, then returns the
 	 * index of the item if it exists in the array. If the item does not exist
-	 * in the array, it returns -1. Won't work with arrays of primitives.
+	 * in the array, it returns -1.</br>
+         * You MUST cast the parameter being passed to this method as a (List).
 	 * @author Erica Garand
 	 * @param target - The item to find. Should be of the same type as the
 	 * elements in the list.

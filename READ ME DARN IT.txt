@@ -1,31 +1,5 @@
 
 
-Hello from Erica
-
-
-The way I see it, and mind you this is just me brainstorming on my own, is that this program
-will need these things to work:
-
--An Instrument Class to hold all the data
--An Account Class to hold the information of the person currently logged in
--Some assorted methods to handle reading from and writing to wherever our data is stored
--A ton of assorted methods that manipulate all the data in the ways we want
--A GUI to tie it all together
-
-The first two things are pretty self explanatory, but all of these things need some planning before
-we go out and do em..
-
-I've done a bit of spitballing on my own about how to structure parts of the program and how to divide
-up the work, which will follow after this. Feel free to make suggestions; once we agree on something I
-can do all the tedious setting up and then we can all get to coding.
-
-And also be warned that literally none of this is brief, at all. Grab a snack and prepare for a read.
-
-
-
-
-
-
 
 FILE STRUCTURE
 
@@ -125,55 +99,3 @@ Method Ideas:
 Why I Designed it Like This:
 	It's just another information holder. It doesn't need to do anything all that fancy. Just hold stuff in one
 	convenient place. Most of the reasons I put for the instrument apply to this too.
-	
-
-	
-	
-
-ALL THE PROCESSING WE NEED TO DO:
-
-From what I can see, the easiest way to get all the data manipulation going is with methods. We have a bunch of static
-global variables --a list of instruments, the current user, etc-- and a class full of public static methods. These methods
-would be the meat of the program, the engine in it's entirety, and we would each be responsible for coding a roughly equal
-amount of these methods.
-
-I'd guess our program could have the following things:
-	-Add a user to the data file
-	-Remove a specific user from the data file
-	*-Add/remove admin privileges for an account on file (wouldn't work for the currently
-	logged in user, so that if there's a single admin they can't un-admin themselves and
-	break the program.)
-	*-Sign in an instrument
-	*-Sign out an instrument
-	*-Modify the service status of an instrument; whether it's in or out right now
-	*-Add an instrument to the data file
-	*-Remove an instrument from the data file
-	-Various retrieval methods...
-		*-A list of all instruments
-		*-A list of instruments that meet certain criteria, like sharing a name, etc
-		-A list of all users
-		*-A list of all the instruments used by a specific person
-		
-Not all of those are necessary. Probably. But it gives us a lot to work with. I've starred the ones I think are
-absolutely necessary.
-
-Some of those are definitely easier than others. If you see a job you want to do, say so, I guess? Just remember that each of
-these functions would ideally be it's own singular method.
-
-
-
-
-
-
-I AM NOW TIRED
-
-I was gonna write a spheal on file io and how we might handle that in a nice neat concise way, and then something about GUI,
-but I'm tired of writing now dammit. I'll probably add to it on the weekend or something. (Tis thursday's eve as I type) Please
-consider my above ideas, and if there's anything you have to add or change then don't hesitate to bring it up.
-
--Erica
-
-
-
-
-

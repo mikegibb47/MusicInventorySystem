@@ -30,7 +30,7 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
-        //InventorySystem sys = new InventorySystem();
+        InventorySystem sys = new InventorySystem();
         try {
             instruments = new Scanner(file2);
         } catch (FileNotFoundException ex) {
@@ -152,7 +152,8 @@ public class Login extends javax.swing.JFrame {
                 //declare the scanner to read from the file of users
                 users = new Scanner(file);
                 users.useDelimiter(",");
-                Account temp = new Account();
+                
+                User temp = new User();
                 //declare the encrypting method
                 MessageDigest mesd = MessageDigest.getInstance("SHA-256");
                 //encrypt the password
@@ -195,7 +196,6 @@ public class Login extends javax.swing.JFrame {
                                 new StudentFrame(temp).setVisible(true);
                             }
                         });
-                        
                     }
                 }
             } catch (NoSuchAlgorithmException ex) {

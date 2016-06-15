@@ -2,7 +2,9 @@ package musicinventorysystem;
 
 import java.io.File;
 import java.util.List;
+import java.util.ArrayList;
 import java.lang.reflect.Array;
+import java.util.Collections;
 
 /* TABLE OF CONTENTS (Use ctrl+f to navigate, case sensitive)
  * 
@@ -25,33 +27,36 @@ public class InventorySystem {
 	private int currentUser;
 	
 	/**A list that holds the information of all registered users in memory.*/
-	private List<Account> users = new List();
+	private List<Account> users;
 	
 	/**A list that holds the information of all registered instruments in memory.*/
-	private List<Instrument> instruments = new List();
+	private List<Instrument> instruments;
 
 	
 	//////////////////////////
 	////// CONSTRUCTORS //////
 	//////////////////////////
 	
-	public InventorySystem(File userFile, File instrumentFile) {
-		users = new List<Account>() {};
-		instruments = new List<Instrument>();
+	public InventorySystem() {
+		users = new ArrayList<Account>();
+		instruments = new ArrayList<Instrument>();
 
 		// BELOW IS DUMMY DATA, FOR TESTING ONLY. The files will have to be read from to get the real data.
-		instruments.add(new Instrument("Clarinet", 1, true, "", "Bilbo Baggins,Corrin of Nohr"));
-		instruments.add(new Instrument("Trumpet", 2, true, "", ""));
-		instruments.add(new Instrument("Trombone", 3, false, "John Doe", "Bilbo Baggins,John Doe"));
-		instruments.add(new Instrument("Cow Bell", 4, false, Instrument.OUT_FOR_SERVICE, ""));
+		instruments.add(new Instrument("Clarinet", "4", true, "", "Bilbo Baggins,Corrin of Nohr"));
+		instruments.add(new Instrument("Trumpet", "2", true, "", ""));
+		instruments.add(new Instrument("Trombone", "3", false, "John Doe", "Bilbo Baggins,John Doe"));
+		instruments.add(new Instrument("Cow Bell", "1", false, Instrument.OUT_FOR_SERVICE, ""));
 		
 		users.add(new Account("Bilbo", "Baggins", "ahobbit", "arkenstone", false, false));
 		users.add(new Account("Corrin", "of Nohr", "yatomaster", "anankos", false, false));
 		users.add(new Account("John", "Doe", "mysteryman", "whoami", false, true));
-		users.add(new Account("TheMighty", "AdminGuy", "rulerofall","sauron", true, false))
+		users.add(new Account("TheMighty", "AdminGuy", "rulerofall","sauron", true, false));
 		
-		instruments = bubbleSort(instruments);
-		users = bubbleSort(users);
+		instruments = bubbleSort((List) instruments);
+		users = bubbleSort((List)users);
+                
+                for (int i = 0; i < instruments.size();i++)
+                    System.out.println(instruments.get(i));
 
 	}
 	
@@ -76,7 +81,7 @@ public class InventorySystem {
 	 * @author Erica Garand*/
 	public Account getLoggedInUser(){
 		if( currentUser >= 0 && currentUser <users.size() )
-			return currentUser;
+			return users.get(currentUser);
 		return null;
 	}
 	
@@ -149,7 +154,7 @@ public class InventorySystem {
 		Account temp = new Account("","",user,pass,false,false);
 		
 		//search through all the accounts
-		int index = binarySearch(temp, users);
+		int index = binarySearch(temp, (List)users);
 		
 		//if a matching account it found, set currentUser to point to that account
 		if (index >= 0)
@@ -184,28 +189,12 @@ public class InventorySystem {
 			swapped = false;
 			for (int i = 0; i < unsorted.size() - 1; i++) {
 				if (unsorted.get(i).compareTo(unsorted.get(i+1)) > 0) {
-					unsorted = swap(i, i + 1, unsorted);
-					swapped = true;
+                                    Collections.swap(unsorted, i, i+1);
+                                    swapped = true;
 				}
 			}
 		} while (swapped);
 		
-		return unsorted;
-	}
-
-	/**
-	 * Swaps two objects in an array
-	 *
-	 * @param m - the first element to be swapped.
-	 * @param n - the second element to be swapped.
-	 * @param array - the array of objects.
-	 * @return the array, with the objects at indices m & n switched
-	 * @author Matthew Gulbronson
-	 */
-	public List<Comparable> swap(int m, int n, List<Comparable> unsorted) {
-		Object temp = unsorted.get(m);
-		Array.set(unsorted, m, unsorted.get(n));
-		Array.set(unsorted, n, temp);
 		return unsorted;
 	}
 	

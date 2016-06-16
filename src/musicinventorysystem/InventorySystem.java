@@ -14,6 +14,7 @@ import java.util.Collections;
  */
 
 /**A class that holds the inventory data in memory and manipulates it as needed.
+ * WARNING: DO NOT USE THE BLANK CONSTRUCTOR. IT IS FOR TESTING PURPOSES ONLY.
  * @author Erica Garand*/
 public class InventorySystem {
 
@@ -35,6 +36,13 @@ public class InventorySystem {
 	////// CONSTRUCTORS //////
 	//////////////////////////
 	
+        /**Creates an inventory system. WARNING: USING THIS CONSTRUCTOR MAKES
+         * THE OBJECT CONTAIN INACCURATE DUMMY DATA. THIS CONSTRUCTOR IS FOR
+         * TESTING PURPOSES ONLY.
+         * @author Erica Garand
+         * @deprecated use the other constructor instead.  
+         */
+        @Deprecated
 	public InventorySystem() {
 		users = new ArrayList<Account>();
 		instruments = new ArrayList<Instrument>();
@@ -53,10 +61,26 @@ public class InventorySystem {
 		instruments = bubbleSort((List)instruments);
 		users = bubbleSort((List)users);
                 
-                for (int i = 0; i < instruments.size();i++)
-                    System.out.println(instruments.get(i));
+                for (int i = 0; i < users.size();i++)
+                    System.out.println(users.get(i));
 
 	}
+        
+        /**Creates an inventory system.
+         @author Erica Garand
+         @param users - the list of users that this inventory system will keep track of.
+         * Should contain at least one admin.
+         @param instruments - the list of instruments that this inventory system will
+         * keep track of.*/
+        public InventorySystem(List<Account> users, List<Instrument> instruments){
+            this.users = new ArrayList<Account>();
+            this.users.addAll(users);
+            this.instruments = new ArrayList<Instrument>();
+            this.instruments.addAll(instruments);
+            
+            instruments = bubbleSort((List)instruments);
+            users = bubbleSort((List)users);
+        }
 	
 	
 	////////////////////////////
@@ -64,9 +88,15 @@ public class InventorySystem {
 	////////////////////////////
 	
 	/**Used to retrieve a list of all the instruments a specific student has used in the past.
-	 * @author Erica Garand*/
+	 * @author Erica Garand
+         @param u - The account to find the signout history of.*/
 	public List<Instrument> getStudentSignoutHistory(Account u){
-		return null;
+            ArrayList<Instrument> stuff = new ArrayList<Instrument>();
+            for (int i = 0; i < instruments.size(); i++){
+                if (instruments.get(i).getCurrentUser().equals(u.getUsername()))
+                    stuff.add(instruments.get(i));
+            }
+            return stuff;
 	}
 
 	/**Used to retrieve a list of all the users currently used.
@@ -90,14 +120,15 @@ public class InventorySystem {
 	
 	/**Allows a new user to be added to the file.
 	 * @author Erica Garand
-     * @param u - The Account object to be added to the list. Should be newly created, as
-     * Account objects are largely unchangeable once created. */
+         * @param u - The Account object to be added to the list. Should be newly created, as
+         * Account objects are largely unchangeable once created. */
 	public void addUser(Account u){
 		users.add(u);
 	}
 
 	/**Allows an admin profile to manually remove a user from the user file, if necessary.
-	 * @author Erica Garand*/
+	 * @author Erica Garand
+         * @param u - The account to remove permanently from memory*/
 	public void removeUser(Account u){
 		if( currentUser >= 0 && currentUser < users.size() && users.get(currentUser).isAdmin() == true ){
 			int index = binarySearch(u, (List)users);
@@ -105,9 +136,26 @@ public class InventorySystem {
                             users.remove(index);
 		}
 	}
+        
+        
+        
+        /**Allows an admin profile to add or remove admin privileges to any account except for itself.
+         @author Erica Garand
+         @param u - The account to change the admin status of.
+         @param a - the status to change the account's status to. True if they should be an admin,
+         * false if they should not be an admin.*/
+        public void changeAdminStatus(Account u, boolean a){
+            if ( currentUser >= 0 && currentUser < users.size() && users.get(currentUser).isAdmin() == true ){
+                int index = binarySearch(u, (List)users);
+                if (index >= 0 && index != currentUser)
+                    users.get(index).setAdminStatus(a);
+            }
+        }
 
 	/**Allows an admin profile to manually add an instrument to the file.
-	 * @author Erica Garand*/
+	 * @author Erica Garand
+         @param a - The instrument to add to the list. Should be newly created, as key components of Insrument
+         * objects are unchangeable once they're created.*/
 	public void addInstrument(Instrument a){
 		if( currentUser >= 0 && currentUser < users.size() && users.get(currentUser).isAdmin() == true ){
 			instruments.add(a);
@@ -115,7 +163,8 @@ public class InventorySystem {
 	}
 
 	/**Allows an admin profile to manually remove an Instrument from the file.
-	 * @author Erica Garand*/
+	 * @author Erica Garand
+         @param barcode - the id number or barcode of the instrument to be removed from memory.*/
 	public void removeInstrument(String barcode){
 		if( currentUser >= 0 && currentUser < users.size() && users.get(currentUser).isAdmin() == true ){
 			Instrument temp = new Instrument("", barcode, false, "", "");
@@ -126,7 +175,8 @@ public class InventorySystem {
 	}
 
 	/**Allows an admin profile to indicate whether or not an instrument is out for service.
-	 * @author Erica Garand*/
+	 * @author Erica Garand
+         @param barcode - the id number or barcode of the instrument to be marked as out for service.*/
 	public void serviceAnInstrument(String barcode){
 		if( currentUser >= 0 && currentUser < users.size() && users.get(currentUser).isAdmin() == true ){
 			Instrument temp = new Instrument("", barcode, false, "", "");
@@ -137,7 +187,8 @@ public class InventorySystem {
 	}
 
 	/**Allows any profile to sign out an instrument.
-	 * @author Erica Garand*/
+	 * @author Erica Garand
+         @param barcode - the id number or barcode of the instrument to be signed out.*/
 	public void signOutInstrument(String barcode){
 		if( currentUser >= 0 && currentUser < users.size() ){
 			Instrument temp = new Instrument("", barcode, false, "", "");
@@ -148,7 +199,8 @@ public class InventorySystem {
 	}
 
 	/**Allows any profile to sign back in an instrument.
-	 * @author Erica Garand*/
+	 * @author Erica Garand
+         @param barcode - the id number or barcode of the instrument to be signed back in*/
 	public void signInInstrument(String barcode){
 		if( currentUser >= 0 && currentUser < users.size() ){
 			Instrument temp = new Instrument("", barcode, false, "", "");
@@ -218,7 +270,8 @@ public class InventorySystem {
 	 * @param target - The item to find. Should be of the same type as the
 	 * elements in the list.
 	 * @param list - The array to search within. Should be of the same type
-	 * as the target.*/
+	 * as the target. NOTE: You must cast this parameter as a (List) for it
+         * to work!*/
 	public static int binarySearch (Comparable target, List<Comparable> list){
 		int low = 0, high = list.size(), mid = 0;
 

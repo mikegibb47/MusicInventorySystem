@@ -5,7 +5,8 @@ package musicinventorysystem;
  * 1- VARIABLES
  * 2- CONSTRUCTORS
  * 3- GETTER METHODS
- * 4- OTHER METHODS
+ * 4- SETER METHODS
+ * 5- OTHER METHODS
  */
 
 /**A class to hold basic information about the currently logged in user.
@@ -41,11 +42,13 @@ public class Account implements Comparable {
 	//////////////////////////
 
 	/**Creates a new account object.
-	@param fname - the first name of the logged in user
-	@param lname - the last name of the logged in user
-	@param admin - whether or not the logged in user has admin priveliges
+	@param fname - the first name of this user
+	@param lname - the last name of this user
+        @param uname - the username of this user
+        @param pword - the password of this user
+	@param admin - whether or not this user has admin privileges
 	@param isUsingInstrument - whether or not the logged in user already as an instrument signed out*/
-	public Account(String fname, String lname, String uname, String pword, boolean admin, boolean isUsingInstrument){
+	public Account(String uname, String pword, String fname, String lname, boolean admin, boolean isUsingInstrument){
 		this.fname = fname;
 		this.lname = lname;
 		this.uname = uname;
@@ -88,6 +91,16 @@ public class Account implements Comparable {
 	public String toString(){
 		return fname + " " + lname + " - Admin: " + admin;
 	}
+        
+        
+        
+        ////////////////////////////
+        ////// SETTER METHODS //////
+        ////////////////////////////
+        
+        public void setAdminStatus(boolean a){
+            admin = a;
+        }
 
 	
 	///////////////////////////

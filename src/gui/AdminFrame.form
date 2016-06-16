@@ -36,6 +36,7 @@
                   <Component id="jComboBox1" alignment="0" max="32767" attributes="0"/>
                   <Component id="jComboBox2" max="32767" attributes="0"/>
                   <Component id="jButton6" max="32767" attributes="0"/>
+                  <Component id="jButton7" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -63,6 +64,8 @@
                       <Component id="jButton3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jButton4" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jButton7" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
@@ -165,6 +168,11 @@
     <Component class="javax.swing.JButton" name="jButton6">
       <Properties>
         <Property name="text" type="java.lang.String" value="History"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButton7">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Admin"/>
       </Properties>
     </Component>
   </SubComponents>

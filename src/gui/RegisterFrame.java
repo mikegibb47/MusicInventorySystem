@@ -168,50 +168,37 @@ public class RegisterFrame extends javax.swing.JFrame {
             users.useDelimiter(",");
             //try to declare the writer
             try {
-                //try to find the encrypting algorithm
-                try {
-                    //declare the encrypting method
-                    MessageDigest mesd = MessageDigest.getInstance("SHA-256");
-                    //encrypt the password
-                    mesd.update((passwordField.getText()).getBytes());
-                    byte byteData[] = mesd.digest();
-                    String password = "";
-                    for (int i = 0; i < byteData.length; ++i) {
-                        password += (Integer.toHexString((byteData[i] & 0xFF) | 0x100).substring(1, 3));
+                String password = gui.Login.sys.encrypt(passwordField.getText());
+                //if the user has been registered already deny their registration
+                boolean found = false;
+                String username = userNameField.getText();
+                while (users.hasNextLine() && found == false) {
+                    if (username.equals(users.next())) {
+                        found = true;
+                    } else if (users.hasNextLine()) {
+                        users.nextLine();
                     }
-                    //if the user has been registered already deny their registration
-                    boolean found = false;
-                    String username = userNameField.getText();
-                    while (users.hasNextLine() && found == false) {
-                        if (username.equals(users.next())) {
-                            found = true;
-                        } else if (users.hasNextLine()) {
-                            users.nextLine();
-                        }
-                    }
-                    if (found == false) {
-                        RegisterPanel.register = true;
-                    }
-                    if (RegisterPanel.register == true) {
-                        //write the information to the file
-                        pwUsers = new PrintWriter(new FileWriter(file, true));
-                        pwUsers.println(username + "," + password + "," + firstNameField.getText() + "," + lastNameField.getText() + ",f,f");
-                        pwUsers.close();
-                        Account user = new Account();
-                        //launch the student window
-                        java.awt.EventQueue.invokeLater(new Runnable() {
-                            public void run() {
-                                new StudentFrame(user).setVisible(true);
-                            }
-                        });
-                    }
-                    //display the outcome of the registration attempt
-                    RegisterPanel.regisTry = true;
-                    registerPanel1.repaint();
-                } catch (NoSuchAlgorithmException ex) {
-                    //if the encrypting algorithm can't be found return an error saying so
-                    Logger.getLogger(RegisterFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                if (found == false) {
+                    RegisterPanel.register = true;
+                }
+                if (RegisterPanel.register == true) {
+                    //write the information to the file
+                    pwUsers = new PrintWriter(new FileWriter(file, true));
+                    pwUsers.println(username + "," + password + "," + firstNameField.getText() + "," + lastNameField.getText() + ",f,f");
+                    pwUsers.close();
+                    Account user = new Account();
+                    //launch the student window
+                    java.awt.EventQueue.invokeLater(new Runnable() {
+                        public void run() {
+                            new StudentFrame(user).setVisible(true);
+                        }
+                    });
+                }
+                //display the outcome of the registration attempt
+                RegisterPanel.regisTry = true;
+                registerPanel1.repaint();
+
             } catch (IOException ex) {
                 //if it can't declare the writer return an error saying so
                 Logger.getLogger(RegisterFrame.class.getName()).log(Level.SEVERE, null, ex);

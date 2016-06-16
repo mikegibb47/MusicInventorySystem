@@ -1,9 +1,14 @@
 package musicinventorysystem;
 
+import gui.RegisterFrame;
 import java.io.File;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /* TABLE OF CONTENTS (Use ctrl+f to navigate, case sensitive)
  * 
@@ -13,227 +18,298 @@ import java.util.Collections;
  * 4- SETTER METHODS
  * 5- OTHER METHODS
  */
-
-/**A class that holds the inventory data in memory and manipulates it as needed.
- * @author Erica Garand*/
+/**
+ * A class that holds the inventory data in memory and manipulates it as needed.
+ *
+ * @author Erica Garand
+ */
 public class InventorySystem {
 
-	///////////////////////
-	////// VARIABLES //////
-	///////////////////////
+    ///////////////////////
+    ////// VARIABLES //////
+    ///////////////////////
+    /**
+     * A number that points to the spot in the user list that contains the
+     * information of the currently logged in user.
+     */
+    private int currentUser;
 
-	/**A number that points to the spot in the user list that contains the information of the currently logged in user.*/
-	private int currentUser;
-	
-	/**A list that holds the information of all registered users in memory.*/
-	private List<Account> users;
-	
-	/**A list that holds the information of all registered instruments in memory.*/
-	private List<Instrument> instruments;
+    /**
+     * A list that holds the information of all registered users in memory.
+     */
+    private List<Account> users;
 
-	
-	//////////////////////////
-	////// CONSTRUCTORS //////
-	//////////////////////////
-	
-	public InventorySystem() {
-		users = new ArrayList<Account>();
-		instruments = new ArrayList<Instrument>();
+    /**
+     * A list that holds the information of all registered instruments in
+     * memory.
+     */
+    private List<Instrument> instruments;
 
-		// BELOW IS DUMMY DATA, FOR TESTING ONLY. The files will have to be read from to get the real data.
-		instruments.add(new Instrument("Clarinet", "4", true, "", "Bilbo Baggins,Corrin of Nohr"));
-		instruments.add(new Instrument("Trumpet", "2", true, "", ""));
-		instruments.add(new Instrument("Trombone", "3", false, "John Doe", "Bilbo Baggins,John Doe"));
-		instruments.add(new Instrument("Cow Bell", "1", false, Instrument.OUT_FOR_SERVICE, ""));
-		
-		users.add(new Account("Bilbo", "Baggins", "ahobbit", "arkenstone", false, false));
-		users.add(new Account("Corrin", "of Nohr", "yatomaster", "anankos", false, false));
-		users.add(new Account("John", "Doe", "mysteryman", "whoami", false, true));
-		users.add(new Account("TheMighty", "AdminGuy", "rulerofall","sauron", true, false));
-		
-		instruments = bubbleSort((List)instruments);
-		users = bubbleSort((List)users);
-                
-                for (int i = 0; i < instruments.size();i++)
-                    System.out.println(instruments.get(i));
+    //////////////////////////
+    ////// CONSTRUCTORS //////
+    //////////////////////////
+    public InventorySystem() {
+        users = new ArrayList<Account>();
+        instruments = new ArrayList<Instrument>();
 
-	}
-	
-	
-	////////////////////////////
-	////// GETTER METHODS //////
-	////////////////////////////
-	
-	/**Used to retrieve a list of all the instruments a specific student has used in the past.
-	 * @author Erica Garand*/
-	public List<Instrument> getStudentSignoutHistory(Account u){
-		return null;
-	}
+        // BELOW IS DUMMY DATA, FOR TESTING ONLY. The files will have to be read from to get the real data.
+        instruments.add(new Instrument("Clarinet", "4", true, "", "Bilbo Baggins,Corrin of Nohr"));
+        instruments.add(new Instrument("Trumpet", "2", true, "", ""));
+        instruments.add(new Instrument("Trombone", "3", false, "John Doe", "Bilbo Baggins,John Doe"));
+        instruments.add(new Instrument("Cow Bell", "1", false, Instrument.OUT_FOR_SERVICE, ""));
 
-	/**Used to retrieve a list of all the users currently used.
-	 * @author Erica Garand*/
-	public List<Account> getUserList(){
-		return users;
-	}
+        users.add(new Account("Bilbo", "Baggins", "ahobbit", "arkenstone", false, false));
+        users.add(new Account("Corrin", "of Nohr", "yatomaster", "anankos", false, false));
+        users.add(new Account("John", "Doe", "mysteryman", "whoami", false, true));
+        users.add(new Account("TheMighty", "AdminGuy", "rulerofall", "sauron", true, false));
 
-	/**Used to retrieve a list of all the users currently used.
-	 * @author Erica Garand*/
-	public Account getLoggedInUser(){
-		if( currentUser >= 0 && currentUser < users.size() )
-			return users.get(currentUser);
-		return null;
-	}
-	
-	
-	////////////////////////////
-	////// SETTER METHODS //////
-	////////////////////////////
-	
-	/**Allows a new user to be added to the file.
-	 * @author Erica Garand
-     * @param u - The Account object to be added to the list. Should be newly created, as
-     * Account objects are largely unchangeable once created. */
-	public void addUser(Account u){
-		users.add(u);
-	}
+        instruments = bubbleSort((List) instruments);
+        users = bubbleSort((List) users);
 
-	/**Allows an admin profile to manually remove a user from the user file, if necessary.
-	 * @author Erica Garand*/
-	public void removeUser(Account u){
-		if( currentUser >= 0 && currentUser < users.size() && users.get(currentUser).isAdmin() == true ){
-			int index = binarySearch(u, (List)users);
-                        if (index >= 0 && index != currentUser)
-                            users.remove(index);
-		}
-	}
+        for (int i = 0; i < instruments.size(); i++) {
+            System.out.println(instruments.get(i));
+        }
 
-	/**Allows an admin profile to manually add an instrument to the file.
-	 * @author Erica Garand*/
-	public void addInstrument(Instrument a){
-		if( currentUser >= 0 && currentUser < users.size() && users.get(currentUser).isAdmin() == true ){
-			instruments.add(a);
-		}
-	}
+    }
 
-	/**Allows an admin profile to manually remove an Instrument from the file.
-	 * @author Erica Garand*/
-	public void removeInstrument(String barcode){
-		if( currentUser >= 0 && currentUser < users.size() && users.get(currentUser).isAdmin() == true ){
-			Instrument temp = new Instrument("", barcode, false, "", "");
-                        int index = binarySearch(temp, (List)instruments);
-                        if (index >= 0 && instruments.get(index).isAvailable() == true)
-                            instruments.remove(index);
-		}
-	}
+    ////////////////////////////
+    ////// GETTER METHODS //////
+    ////////////////////////////
+    /**
+     * Used to retrieve a list of all the instruments a specific student has
+     * used in the past.
+     *
+     * @author Erica Garand
+     */
+    public List<Instrument> getStudentSignoutHistory(Account u) {
+        return null;
+    }
 
-	/**Allows an admin profile to indicate whether or not an instrument is out for service.
-	 * @author Erica Garand*/
-	public void serviceAnInstrument(String barcode){
-		if( currentUser >= 0 && currentUser < users.size() && users.get(currentUser).isAdmin() == true ){
-			Instrument temp = new Instrument("", barcode, false, "", "");
-                        int index = binarySearch(temp, (List)instruments);
-                        if (index >= 0 && instruments.get(index).isAvailable() == true)
-                            instruments.get(index).service();
-		}
-	}
+    /**
+     * Used to retrieve a list of all the users currently used.
+     *
+     * @author Erica Garand
+     */
+    public List<Account> getUserList() {
+        return users;
+    }
 
-	/**Allows any profile to sign out an instrument.
-	 * @author Erica Garand*/
-	public void signOutInstrument(String barcode){
-		if( currentUser >= 0 && currentUser < users.size() ){
-			Instrument temp = new Instrument("", barcode, false, "", "");
-                        int index = binarySearch(temp, (List)instruments);
-                        if (index >= 0 && instruments.get(index).isAvailable() == true)
-                            instruments.get(index).signOut(users.get(currentUser).getUsername());
-		}
-	}
+    /**
+     * Used to retrieve a list of all the users currently used.
+     *
+     * @author Erica Garand
+     */
+    public Account getLoggedInUser() {
+        if (currentUser >= 0 && currentUser < users.size()) {
+            return users.get(currentUser);
+        }
+        return null;
+    }
 
-	/**Allows any profile to sign back in an instrument.
-	 * @author Erica Garand*/
-	public void signInInstrument(String barcode){
-		if( currentUser >= 0 && currentUser < users.size() ){
-			Instrument temp = new Instrument("", barcode, false, "", "");
-                        int index = binarySearch(temp, (List)instruments);
-                        if (index >= 0 && instruments.get(index).isAvailable() == false)
-                            instruments.get(index).signIn();
-		}
-	}
-	
-	/**Used to log in a user to the program.
-	 * @author Erica Garand
-	 * @param user - The username of the user trying to log in.
-	 * @param pass - The password of the user trying to log in.*/
-	public void logIn(String user, String pass){
-		Account temp = new Account("","",user,pass,false,false);
-		
-		//search through all the accounts
-		int index = binarySearch(temp, (List)users);
-		
-		//if a matching account it found, set currentUser to point to that account
-		if (index >= 0)
-			currentUser = index;
-		//if no matching account was found, throw an exception
-		else
-			System.out.println("Put exception throwing stuff here");
-	}
+    ////////////////////////////
+    ////// SETTER METHODS //////
+    ////////////////////////////
+    /**
+     * Allows a new user to be added to the file.
+     *
+     * @author Erica Garand
+     * @param u - The Account object to be added to the list. Should be newly
+     * created, as Account objects are largely unchangeable once created.
+     */
+    public void addUser(Account u) {
+        users.add(u);
+    }
 
-	/**Used to log out the user currently using the program.
-	 * @author Erica Garand*/
-	public void logOut(){
-		//set currentUser to -1, so it points to no account
-		currentUser = -1;
-	}
-	
-	
-	///////////////////////////
-	////// OTHER METHODS //////
-	///////////////////////////
+    /**
+     * Allows an admin profile to manually remove a user from the user file, if
+     * necessary.
+     *
+     * @author Erica Garand
+     */
+    public void removeUser(Account u) {
+        if (currentUser >= 0 && currentUser < users.size() && users.get(currentUser).isAdmin() == true) {
+            int index = binarySearch(u, (List) users);
+            if (index >= 0 && index != currentUser) {
+                users.remove(index);
+            }
+        }
+    }
 
-	/**
-	 * Sorts an unsorted array of objects which implement the comparable
-	 * interface using the bubble-sort algorithm
-	 *
-	 * @param unsorted - the array of comparable objects to be sorted
-	 * @author Matthew Gulbronson
-	 */
-	public static List<Comparable> bubbleSort(List<Comparable> unsorted) {
-		boolean swapped;
-		do {
-			swapped = false;
-			for (int i = 0; i < unsorted.size() - 1; i++) {
-				if (unsorted.get(i).compareTo(unsorted.get(i+1)) > 0) {
-                                    Collections.swap(unsorted, i, i+1);
-                                    swapped = true;
-				}
-			}
-		} while (swapped);
-		
-		return unsorted;
-	}
-	
-	/**Does a binary search for an item in an array of items, then returns the
-	 * index of the item if it exists in the array. If the item does not exist
-	 * in the array, it returns -1.</br>
-         * You MUST cast the parameter being passed to this method as a (List).
-	 * @author Erica Garand
-	 * @param target - The item to find. Should be of the same type as the
-	 * elements in the list.
-	 * @param list - The array to search within. Should be of the same type
-	 * as the target.*/
-	public static int binarySearch (Comparable target, List<Comparable> list){
-		int low = 0, high = list.size(), mid = 0;
+    /**
+     * Allows an admin profile to manually add an instrument to the file.
+     *
+     * @author Erica Garand
+     */
+    public void addInstrument(Instrument a) {
+        if (currentUser >= 0 && currentUser < users.size() && users.get(currentUser).isAdmin() == true) {
+            instruments.add(a);
+        }
+    }
 
-		while (low <= high){
-			mid = (low + high) / 2;
-			if (list.get(mid).compareTo(target) == 0)
-				return mid;
-			else if (list.get(mid).compareTo(target) > 0)
-				high = mid - 1;
-			else
-				low = mid + 1;
-		}
+    /**
+     * Allows an admin profile to manually remove an Instrument from the file.
+     *
+     * @author Erica Garand
+     */
+    public void removeInstrument(String barcode) {
+        if (currentUser >= 0 && currentUser < users.size() && users.get(currentUser).isAdmin() == true) {
+            Instrument temp = new Instrument("", barcode, false, "", "");
+            int index = binarySearch(temp, (List) instruments);
+            if (index >= 0 && instruments.get(index).isAvailable() == true) {
+                instruments.remove(index);
+            }
+        }
+    }
 
-		return -1;
-	}
+    /**
+     * Allows an admin profile to indicate whether or not an instrument is out
+     * for service.
+     *
+     * @author Erica Garand
+     */
+    public void serviceAnInstrument(String barcode) {
+        if (currentUser >= 0 && currentUser < users.size() && users.get(currentUser).isAdmin() == true) {
+            Instrument temp = new Instrument("", barcode, false, "", "");
+            int index = binarySearch(temp, (List) instruments);
+            if (index >= 0 && instruments.get(index).isAvailable() == true) {
+                instruments.get(index).service();
+            }
+        }
+    }
+
+    /**
+     * Allows any profile to sign out an instrument.
+     *
+     * @author Erica Garand
+     */
+    public void signOutInstrument(String barcode) {
+        if (currentUser >= 0 && currentUser < users.size()) {
+            Instrument temp = new Instrument("", barcode, false, "", "");
+            int index = binarySearch(temp, (List) instruments);
+            if (index >= 0 && instruments.get(index).isAvailable() == true) {
+                instruments.get(index).signOut(users.get(currentUser).getUsername());
+            }
+        }
+    }
+
+    /**
+     * Allows any profile to sign back in an instrument.
+     *
+     * @author Erica Garand
+     */
+    public void signInInstrument(String barcode) {
+        if (currentUser >= 0 && currentUser < users.size()) {
+            Instrument temp = new Instrument("", barcode, false, "", "");
+            int index = binarySearch(temp, (List) instruments);
+            if (index >= 0 && instruments.get(index).isAvailable() == false) {
+                instruments.get(index).signIn();
+            }
+        }
+    }
+
+    /**
+     * Used to log in a user to the program.
+     *
+     * @author Erica Garand
+     * @param user - The username of the user trying to log in.
+     * @param pass - The password of the user trying to log in.
+     */
+    public void logIn(String user, String pass) {
+        Account temp = new Account("", "", user, pass, false, false);
+
+        //search through all the accounts
+        int index = binarySearch(temp, (List) users);
+
+        //if a matching account it found, set currentUser to point to that account
+        if (index >= 0) {
+            currentUser = index;
+        } //if no matching account was found, throw an exception
+        else {
+            System.out.println("Put exception throwing stuff here");
+        }
+    }
+
+    /**
+     * Used to log out the user currently using the program.
+     *
+     * @author Erica Garand
+     */
+    public void logOut() {
+        //set currentUser to -1, so it points to no account
+        currentUser = -1;
+    }
+
+    ///////////////////////////
+    ////// OTHER METHODS //////
+    ///////////////////////////
+    /**
+     * Sorts an unsorted array of objects which implement the comparable
+     * interface using the bubble-sort algorithm
+     *
+     * @param unsorted - the array of comparable objects to be sorted
+     * @author Matthew Gulbronson
+     */
+    public static List<Comparable> bubbleSort(List<Comparable> unsorted) {
+        boolean swapped;
+        do {
+            swapped = false;
+            for (int i = 0; i < unsorted.size() - 1; i++) {
+                if (unsorted.get(i).compareTo(unsorted.get(i + 1)) > 0) {
+                    Collections.swap(unsorted, i, i + 1);
+                    swapped = true;
+                }
+            }
+        } while (swapped);
+
+        return unsorted;
+    }
+
+    /**
+     * Does a binary search for an item in an array of items, then returns the
+     * index of the item if it exists in the array. If the item does not exist
+     * in the array, it returns -1.</br>
+     * You MUST cast the parameter being passed to this method as a (List).
+     *
+     * @author Erica Garand
+     * @param target - The item to find. Should be of the same type as the
+     * elements in the list.
+     * @param list - The array to search within. Should be of the same type as
+     * the target.
+     */
+    public static int binarySearch(Comparable target, List<Comparable> list) {
+        int low = 0, high = list.size(), mid = 0;
+
+        while (low <= high) {
+            mid = (low + high) / 2;
+            if (list.get(mid).compareTo(target) == 0) {
+                return mid;
+            } else if (list.get(mid).compareTo(target) > 0) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return -1;
+    }
+
+    public String encrypt(String string) {
+        try {
+            //declare the encrypting method
+            MessageDigest mesd = MessageDigest.getInstance("SHA-256");
+            //encrypt the string
+            mesd.update(string.getBytes());
+            byte byteData[] = mesd.digest();
+            String encrypted = "";
+            for (int i = 0; i < byteData.length; ++i) {
+                encrypted += (Integer.toHexString((byteData[i] & 0xFF) | 0x100).substring(1, 3));
+            }
+            return encrypted;
+        } catch (NoSuchAlgorithmException ex) {
+            //if the encrypting algorithm can't be found return an error saying so
+            Logger.getLogger(RegisterFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
 }

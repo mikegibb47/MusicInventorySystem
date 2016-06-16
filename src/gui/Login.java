@@ -28,7 +28,7 @@ public class Login extends javax.swing.JFrame {
     File file = new File("users.txt");
     File file2 = new File("instruments.txt");
     //declare the methods class
-    InventorySystem sys = new InventorySystem();
+    static InventorySystem sys = new InventorySystem();
 
     /**
      * Creates new form Login
@@ -38,7 +38,7 @@ public class Login extends javax.swing.JFrame {
         //declare the instruments scanner
         try {
             instruments = new Scanner(file2);
-            users.useDelimiter(",");
+            instruments.useDelimiter(",");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -49,6 +49,7 @@ public class Login extends javax.swing.JFrame {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //sys.loadAccounts(file);
     }
 
     /**
@@ -158,52 +159,36 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
-        //try to find the encrypting method
-        try {
-            //declare the encrypting method
-            MessageDigest mesd = MessageDigest.getInstance("SHA-256");
-            //encrypt the password
-            mesd.update(PasswordField.getText().getBytes());
-            byte byteData[] = mesd.digest();
-            String encPassword = "";
-            for (int i = 0; i < byteData.length; ++i) {
-                encPassword += (Integer.toHexString((byteData[i] & 0xFF) | 0x100).substring(1, 3));
-            }
-            Account temp = new Account(UsernameField.getText(), encPassword, "", "", false, false);
-            int locate = sys.binarySearch(temp, (List) sys.getUserList());
-            //check if the username and passwords match a user's
-            if (locate != -1) {
-                SuccessPanel.login = true;
-            } else {
-                SuccessPanel.login = false;
-            }
-            SuccessPanel.loginTry = true;
-            successPanel1.repaint();
-
-            if (SuccessPanel.login == true) {
-                //corresponding post login window
-                for (int i = 0; i < 2; i++) {
-                    users.next();
-                }
-                if (users.next().equals("f")) {
-                    java.awt.EventQueue.invokeLater(new Runnable() {
-                        public void run() {
-                            new StudentFrame(temp).setVisible(true);
-                        }
-                    });
-                } else {
-                    java.awt.EventQueue.invokeLater(new Runnable() {
-                        public void run() {
-                            new AdminFrame().setVisible(true);
-                        }
-                    });
-                }
-            }
-        } catch (NoSuchAlgorithmException ex) {
-            //if the encrypting method can't be found return an error saying so
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        String encPassword = gui.Login.sys.encrypt(PasswordField.getText());
+        Account temp = new Account(UsernameField.getText(), encPassword, "", "", false, false);
+        int locate = sys.binarySearch(temp, (List) sys.getUserList());
+        //check if the username and passwords match a user's
+        if (locate != -1) {
+            SuccessPanel.login = true;
+        } else {
+            SuccessPanel.login = false;
         }
-
+        SuccessPanel.loginTry = true;
+        successPanel1.repaint();
+        if (SuccessPanel.login == true) {
+            //corresponding post login window
+            for (int i = 0; i < 2; i++) {
+                users.next();
+            }
+            if (users.next().equals("f")) {
+                java.awt.EventQueue.invokeLater(new Runnable() {
+                    public void run() {
+                        new StudentFrame(temp).setVisible(true);
+                    }
+                });
+            } else {
+                java.awt.EventQueue.invokeLater(new Runnable() {
+                    public void run() {
+                        new AdminFrame().setVisible(true);
+                    }
+                });
+            }
+        }
     }//GEN-LAST:event_LoginButtonActionPerformed
 
     private void RegisterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegisterButtonActionPerformed

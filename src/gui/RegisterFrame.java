@@ -54,7 +54,7 @@ public class RegisterFrame extends javax.swing.JFrame {
         lastNameField = new javax.swing.JTextField();
         RegisterButton = new javax.swing.JButton();
         CancelButton = new javax.swing.JButton();
-        registerPanel1 = new musicinventorysystem.RegisterPanel();
+        registerPanel1 = new gui.RegisterPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -187,7 +187,7 @@ public class RegisterFrame extends javax.swing.JFrame {
                     pwUsers = new PrintWriter(new FileWriter(file, true));
                     pwUsers.println(username + "," + password + "," + firstNameField.getText() + "," + lastNameField.getText() + ",f,f");
                     pwUsers.close();
-                    Account user = new Account();
+                    Account user = new Account(username, password, "", "", false, false);
                     //launch the student window
                     java.awt.EventQueue.invokeLater(new Runnable() {
                         public void run() {
@@ -224,7 +224,7 @@ public class RegisterFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JTextField lastNameField;
     private javax.swing.JPasswordField passwordField;
-    private musicinventorysystem.RegisterPanel registerPanel1;
+    private gui.RegisterPanel registerPanel1;
     private javax.swing.JTextField userNameField;
     // End of variables declaration//GEN-END:variables
 }

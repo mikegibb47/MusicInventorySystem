@@ -67,7 +67,7 @@ public class Login extends javax.swing.JFrame {
         PasswordField = new javax.swing.JPasswordField();
         LoginButton = new javax.swing.JButton();
         RegisterButton = new javax.swing.JButton();
-        successPanel1 = new musicinventorysystem.SuccessPanel();
+        successPanel1 = new gui.SuccessPanel();
         UsernameField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -243,6 +243,6 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private musicinventorysystem.SuccessPanel successPanel1;
+    private gui.SuccessPanel successPanel1;
     // End of variables declaration//GEN-END:variables
 }
